@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { auth } from "@/auth";
 
 import { markQuestionCompleted } from "./actions";
 
@@ -11,16 +12,21 @@ type Props = {
 };
 
 export default async function QuestionPage({ params }: Props) {
+  const session = await auth();
   const { slug, questionId } = await params;
+
+  if(!session?.user?.email){
+    redirect('/login')
+  }
 
   const question = await prisma.question.findUnique({
     where: { id: questionId },
     include: { topic: true },
   });
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findUniqueOrThrow({
   where: {
-    email: "test@example.com",
+    email: session.user.email,
   },
 });
 
@@ -30,16 +36,14 @@ export default async function QuestionPage({ params }: Props) {
     notFound();
   }
 
-  const progress = user
-  ? await prisma.userProgress.findUnique({
-      where: {
-        userId_questionId: {
-          userId: user.id,
-          questionId: question.id,
-        },
-      },
-    })
-  : null;
+const progress = await prisma.userProgress.findUnique({
+  where: {
+    userId_questionId: {
+      userId: user.id,
+      questionId: question.id,
+    },
+  },
+});
 
 const isCompleted = progress?.completed ?? false;
 

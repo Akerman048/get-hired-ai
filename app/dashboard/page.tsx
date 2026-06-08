@@ -1,12 +1,18 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
-const TEST_USER_EMAIL = "test@example.com";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
-  const user = await prisma.user.findUnique({
+  const session = await auth();
+
+  if (!session?.user?.email) {
+    redirect("/login");
+  }
+  const user = await prisma.user.findUniqueOrThrow({
     where: {
-      email: TEST_USER_EMAIL,
+      email: session.user.email,
     },
   });
 
@@ -34,14 +40,14 @@ export default async function DashboardPage() {
 
   const totalQuestions = topics.reduce(
     (sum, topic) => sum + topic.questions.length,
-    0
+    0,
   );
 
   const completedQuestions = topics.reduce(
     (sum, topic) =>
       sum +
       topic.questions.filter((question) => question.progress.length > 0).length,
-    0
+    0,
   );
 
   return (
@@ -55,7 +61,7 @@ export default async function DashboardPage() {
       <div className="space-y-4">
         {topics.map((topic) => {
           const completed = topic.questions.filter(
-            (question) => question.progress.length > 0
+            (question) => question.progress.length > 0,
           ).length;
 
           const total = topic.questions.length;

@@ -2,16 +2,21 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-
-const TEST_USER_EMAIL = "test@example.com";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export async function markQuestionCompleted(formData: FormData) {
+  const session = await auth();
+
+  if (!session?.user?.email) {
+    redirect("/login");
+  }
   const questionId = formData.get("questionId") as string;
   const path = formData.get("path") as string;
 
   const user = await prisma.user.findUniqueOrThrow({
     where: {
-      email: TEST_USER_EMAIL,
+      email: session.user.email,
     },
   });
 

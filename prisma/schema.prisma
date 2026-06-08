@@ -104,6 +104,25 @@ model UserProgress {
   @@unique([userId, questionId])
 }
 
+model UserAnswer {
+  id         String   @id @default(cuid())
+
+  userId     String
+  questionId String?
+
+  questionText String
+  answerText   String
+
+  aiFeedback   String?
+  aiScore      Int?
+  aiRoadmap    String?
+
+  createdAt DateTime @default(now())
+
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question   Question? @relation(fields: [questionId], references: [id], onDelete: SetNull)
+}
+
 enum Level {
   JUNIOR
   MIDDLE
