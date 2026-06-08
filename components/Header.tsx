@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
+import { logout } from "@/app/actions/auth";
 
 export async function Header() {
   const session = await auth();
@@ -20,10 +21,7 @@ export async function Header() {
 
           {session?.user ? (
             <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/" });
-              }}
+              action={logout}
             >
               <button
                 type="submit"
