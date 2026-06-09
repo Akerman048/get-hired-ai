@@ -14,12 +14,36 @@ export default async function EditQuestionPage({ params }: Props) {
 
   const question = await prisma.question.findUnique({
     where: { id },
+    include: {
+      lessonPart: true,
+    },
   });
 
-  const topics = await prisma.topic.findMany({
-    orderBy: {
-      name: "asc",
+  const parts = await prisma.lessonPart.findMany({
+    include: {
+      lesson: {
+        include: {
+          topic: true,
+        },
+      },
     },
+    orderBy: [
+      {
+        lesson: {
+          topic: {
+            name: "asc",
+          },
+        },
+      },
+      {
+        lesson: {
+          order: "asc",
+        },
+      },
+      {
+        order: "asc",
+      },
+    ],
   });
 
   if (!question) {
@@ -37,24 +61,24 @@ export default async function EditQuestionPage({ params }: Props) {
         <input type="hidden" name="id" value={question.id} />
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Topic</label>
+          <label className="mb-2 block font-medium">Lesson Part</label>
 
           <select
-            name="topicId"
+            name="lessonPartId"
             required
-            defaultValue={question.topicId}
+            defaultValue={question.lessonPartId}
             className="w-full rounded-lg border p-3"
           >
-            {topics.map((topic) => (
-              <option key={topic.id} value={topic.id}>
-                {topic.name}
+            {parts.map((part) => (
+              <option key={part.id} value={part.id}>
+                {part.lesson.topic.name} / {part.lesson.title} / {part.title}
               </option>
             ))}
           </select>
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Title</label>
+          <label className="mb-2 block font-medium">Question title</label>
 
           <input
             name="title"
@@ -65,24 +89,24 @@ export default async function EditQuestionPage({ params }: Props) {
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Answer</label>
+          <label className="mb-2 block font-medium">Prompt</label>
 
           <textarea
-            name="answer"
+            name="prompt"
             required
-            rows={5}
-            defaultValue={question.answer}
-            className="w-full rounded-lg border p-3"
+            rows={6}
+            defaultValue={question.prompt}
+            className="w-full rounded-lg border p-3 font-mono"
           />
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Explanation</label>
+          <label className="mb-2 block font-medium">Order</label>
 
-          <textarea
-            name="explanation"
-            rows={8}
-            defaultValue={question.explanation ?? ""}
+          <input
+            name="order"
+            type="number"
+            defaultValue={question.order}
             className="w-full rounded-lg border p-3"
           />
         </div>

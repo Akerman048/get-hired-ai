@@ -1,63 +1,61 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { Level } from "@/generated/prisma/enums";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function createQuestion(formData: FormData) {
-  const lessonPartId = formData.get("lessonPartId") as string;
+export async function createLessonPart(formData: FormData) {
+  const lessonId = formData.get("lessonId") as string;
   const title = formData.get("title") as string;
-  const prompt = formData.get("prompt") as string;
-  const level = formData.get("level") as Level;
+  const content = formData.get("content") as string;
   const order = Number(formData.get("order") || 0);
 
-  await prisma.question.create({
+  await prisma.lessonPart.create({
     data: {
-      lessonPartId,
+      lessonId,
       title,
-      prompt,
-      level,
+      content,
       order,
     },
   });
 
   revalidatePath("/topics");
+  revalidatePath("/admin/parts");
   revalidatePath("/admin/questions");
 }
 
-export async function deleteQuestion(formData: FormData) {
+export async function deleteLessonPart(formData: FormData) {
   const id = formData.get("id") as string;
 
-  await prisma.question.delete({
+  await prisma.lessonPart.delete({
     where: { id },
   });
 
   revalidatePath("/topics");
+  revalidatePath("/admin/parts");
   revalidatePath("/admin/questions");
 }
 
-export async function updateQuestion(formData: FormData) {
+export async function updateLessonPart(formData: FormData) {
   const id = formData.get("id") as string;
-  const lessonPartId = formData.get("lessonPartId") as string;
+  const lessonId = formData.get("lessonId") as string;
   const title = formData.get("title") as string;
-  const prompt = formData.get("prompt") as string;
-  const level = formData.get("level") as Level;
+  const content = formData.get("content") as string;
   const order = Number(formData.get("order") || 0);
 
-  await prisma.question.update({
+  await prisma.lessonPart.update({
     where: { id },
     data: {
-      lessonPartId,
+      lessonId,
       title,
-      prompt,
-      level,
+      content,
       order,
     },
   });
 
   revalidatePath("/topics");
+  revalidatePath("/admin/parts");
   revalidatePath("/admin/questions");
 
-  redirect("/admin/questions");
+  redirect("/admin/parts");
 }

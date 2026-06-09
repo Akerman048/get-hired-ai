@@ -8,32 +8,64 @@ datasource db {
 }
 
 model Topic {
-  id        String     @id @default(cuid())
+  id        String   @id @default(cuid())
   name      String
-  slug      String     @unique
+  slug      String   @unique
 
-  questions Question[]
+  lessons   Lesson[]
 
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Question {
+model Lesson {
   id          String   @id @default(cuid())
   topicId     String
 
   title       String
-  answer      String
-  explanation String?
-  level       Level
+  slug        String
+  description String?
+  order       Int      @default(0)
 
-  topic       Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
-  userAnswers UserAnswer[]
+  topic       Topic        @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  parts       LessonPart[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  progress UserProgress[]
+  @@unique([topicId, slug])
+}
+
+model LessonPart {
+  id        String   @id @default(cuid())
+  lessonId  String
+
+  title     String
+  content   String   // пояснення частини
+  order     Int      @default(0)
+
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questions Question[]
+  progress  UserProgress[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Question {
+  id           String   @id @default(cuid())
+  lessonPartId String
+
+  title        String
+  prompt       String   // питання для юзера / AI
+  level        Level
+  order        Int      @default(0)
+
+  lessonPart   LessonPart @relation(fields: [lessonPartId], references: [id], onDelete: Cascade)
+  userAnswers  UserAnswer[]
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model User {
@@ -90,20 +122,20 @@ model VerificationToken {
 }
 
 model UserProgress {
-  id         String   @id @default(cuid())
+  id           String   @id @default(cuid())
 
-  userId     String
-  questionId String
+  userId       String
+  lessonPartId String
 
-  completed  Boolean  @default(false)
+  completed    Boolean  @default(false)
 
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonPart   LessonPart @relation(fields: [lessonPartId], references: [id], onDelete: Cascade)
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  @@unique([userId, questionId])
+  @@unique([userId, lessonPartId])
 }
 
 model UserAnswer {

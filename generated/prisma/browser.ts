@@ -23,6 +23,16 @@ export * from './enums';
  */
 export type Topic = Prisma.TopicModel
 /**
+ * Model Lesson
+ * 
+ */
+export type Lesson = Prisma.LessonModel
+/**
+ * Model LessonPart
+ * 
+ */
+export type LessonPart = Prisma.LessonPartModel
+/**
  * Model Question
  * 
  */

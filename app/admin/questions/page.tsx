@@ -2,22 +2,35 @@ import { prisma } from "@/lib/prisma";
 import { Level } from "@/generated/prisma/enums";
 import Link from "next/link";
 import { createQuestion, deleteQuestion } from "./actions";
+import MarkdownContent from "@/components/ui/MarkdownContent";
 
 export default async function AdminQuestionsPage() {
-  const topics = await prisma.topic.findMany({
-    orderBy: {
-      name: "asc",
-    },
-  });
-
   const questions = await prisma.question.findMany({
     include: {
-      topic: true,
+      lessonPart: {
+        include: {
+          lesson: {
+            include: {
+              topic: true,
+            },
+          },
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
     },
   });
+
+const parts = await prisma.lessonPart.findMany({
+  include: {
+    lesson: {
+      include: {
+        topic: true,
+      },
+    },
+  },
+});
 
   return (
     <main className="mx-auto max-w-5xl p-8">
@@ -28,48 +41,51 @@ export default async function AdminQuestionsPage() {
         className="mb-10 rounded-xl border p-6 shadow-sm"
       >
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Topic</label>
+          <label className="mb-2 block font-medium">Lesson Part</label>
 
           <select
-            name="topicId"
+            name="lessonPartId"
             required
             className="w-full rounded-lg border p-3"
           >
-            {topics.map((topic) => (
-              <option key={topic.id} value={topic.id}>
-                {topic.name}
+            {parts.map((part) => (
+              <option key={part.id} value={part.id}>
+                {part.lesson.topic.name} / {part.lesson.title} / {part.title}
               </option>
             ))}
           </select>
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Title</label>
+          <label className="mb-2 block font-medium">Question title</label>
 
           <input
             name="title"
             required
+            placeholder="Explain variables"
             className="w-full rounded-lg border p-3"
           />
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Answer</label>
+          <label className="mb-2 block font-medium">Prompt</label>
 
           <textarea
-            name="answer"
+            name="prompt"
             required
-            rows={5}
-            className="w-full rounded-lg border p-3"
+            rows={6}
+            placeholder="Explain what a variable is in your own words."
+            className="w-full rounded-lg border p-3 font-mono"
           />
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Explanation</label>
+          <label className="mb-2 block font-medium">Order</label>
 
-          <textarea
-            name="explanation"
-            rows={8}
+          <input
+            name="order"
+            type="number"
+            defaultValue={0}
             className="w-full rounded-lg border p-3"
           />
         </div>
@@ -83,16 +99,14 @@ export default async function AdminQuestionsPage() {
             className="w-full rounded-lg border p-3"
           >
             <option value={Level.JUNIOR}>Junior</option>
-
             <option value={Level.MIDDLE}>Middle</option>
-
             <option value={Level.SENIOR}>Senior</option>
           </select>
         </div>
 
         <button
           type="submit"
-          className="rounded-lg bg-black px-5 py-3 text-white transition hover:opacity-80 cursor-pointer"
+          className="cursor-pointer rounded-lg bg-black px-5 py-3 text-white transition hover:opacity-80"
         >
           Create Question
         </button>
@@ -116,28 +130,25 @@ export default async function AdminQuestionsPage() {
               </div>
 
               <p className="mb-2 text-sm text-gray-500">
-                {question.topic.name}
+                {question.lessonPart.lesson.topic.name} /{" "}
+                {question.lessonPart.lesson.title} / {question.lessonPart.title}
               </p>
 
-              <p className="mb-2 text-sm">{question.answer}</p>
+              <MarkdownContent content={question.prompt} />
 
-              {question.explanation && (
-                <p className="mb-4 text-sm text-gray-600">
-                  {question.explanation}
-                </p>
-              )}
-
-              <form action={deleteQuestion} >
+              <form action={deleteQuestion} className="mt-4">
                 <input type="hidden" name="id" value={question.id} />
+
                 <Link
                   href={`/admin/questions/${question.id}/edit`}
-                  className="rounded-lg bg-gray-700 px-4 py-2 mr-2 text-md text-white transition hover:opacity-80 cursor-pointer"
+                  className="mr-2 rounded-lg bg-gray-700 px-4 py-2 text-md text-white transition hover:opacity-80"
                 >
                   Edit
                 </Link>
+
                 <button
                   type="submit"
-                  className="rounded-lg bg-red-600 px-2 py-1 text-sm text-white transition hover:opacity-80 cursor-pointer"
+                  className="cursor-pointer rounded-lg bg-red-600 px-2 py-1 text-sm text-white transition hover:opacity-80"
                 >
                   Delete
                 </button>

@@ -7,13 +7,13 @@ export default async function AdminTopicsPage() {
     orderBy: {
       name: "asc",
     },
-    include: {
-      _count: {
-        select: {
-          questions: true,
-        },
-      },
+include: {
+  _count: {
+    select: {
+      lessons: true,
     },
+  },
+},
   });
 
   return (
@@ -57,7 +57,7 @@ export default async function AdminTopicsPage() {
                   <h3 className="font-semibold">{topic.name}</h3>
                   <p className="text-sm text-gray-500">/{topic.slug}</p>
                   <p className="text-sm text-gray-500">
-                    Questions: {topic._count.questions}
+                   Lessons: {topic._count.lessons}
                   </p>
                 </div>
 

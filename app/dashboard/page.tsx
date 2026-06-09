@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
@@ -10,24 +9,25 @@ export default async function DashboardPage() {
   if (!session?.user?.email) {
     redirect("/login");
   }
+
   const user = await prisma.user.findUniqueOrThrow({
     where: {
       email: session.user.email,
     },
   });
 
-  if (!user) {
-    return <main className="p-8">User not found</main>;
-  }
-
   const topics = await prisma.topic.findMany({
     include: {
-      questions: {
+      lessons: {
         include: {
-          progress: {
-            where: {
-              userId: user.id,
-              completed: true,
+          parts: {
+            include: {
+              progress: {
+                where: {
+                  userId: user.id,
+                  completed: true,
+                },
+              },
             },
           },
         },
@@ -38,33 +38,37 @@ export default async function DashboardPage() {
     },
   });
 
-  const totalQuestions = topics.reduce(
-    (sum, topic) => sum + topic.questions.length,
-    0,
-  );
+  const getTopicParts = (topic: (typeof topics)[number]) => {
+    return topic.lessons.flatMap((lesson) => lesson.parts);
+  };
 
-  const completedQuestions = topics.reduce(
-    (sum, topic) =>
-      sum +
-      topic.questions.filter((question) => question.progress.length > 0).length,
-    0,
-  );
+  const totalParts = topics.reduce((sum, topic) => {
+    return sum + getTopicParts(topic).length;
+  }, 0);
+
+  const completedParts = topics.reduce((sum, topic) => {
+    const parts = getTopicParts(topic);
+
+    return sum + parts.filter((part) => part.progress.length > 0).length;
+  }, 0);
 
   return (
     <main className="mx-auto max-w-5xl p-8">
       <h1 className="mb-2 text-4xl font-bold">Dashboard</h1>
 
       <p className="mb-8 text-gray-500">
-        Progress: {completedQuestions} / {totalQuestions} completed
+        Progress: {completedParts} / {totalParts} completed
       </p>
 
       <div className="space-y-4">
         {topics.map((topic) => {
-          const completed = topic.questions.filter(
-            (question) => question.progress.length > 0,
+          const parts = getTopicParts(topic);
+
+          const completed = parts.filter(
+            (part) => part.progress.length > 0,
           ).length;
 
-          const total = topic.questions.length;
+          const total = parts.length;
 
           return (
             <Link

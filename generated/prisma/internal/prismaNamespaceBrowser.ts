@@ -52,6 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Topic: 'Topic',
+  Lesson: 'Lesson',
+  LessonPart: 'LessonPart',
   Question: 'Question',
   User: 'User',
   Account: 'Account',
@@ -88,13 +90,40 @@ export const TopicScalarFieldEnum = {
 export type TopicScalarFieldEnum = (typeof TopicScalarFieldEnum)[keyof typeof TopicScalarFieldEnum]
 
 
-export const QuestionScalarFieldEnum = {
+export const LessonScalarFieldEnum = {
   id: 'id',
   topicId: 'topicId',
   title: 'title',
-  answer: 'answer',
-  explanation: 'explanation',
+  slug: 'slug',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
+
+
+export const LessonPartScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  title: 'title',
+  content: 'content',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonPartScalarFieldEnum = (typeof LessonPartScalarFieldEnum)[keyof typeof LessonPartScalarFieldEnum]
+
+
+export const QuestionScalarFieldEnum = {
+  id: 'id',
+  lessonPartId: 'lessonPartId',
+  title: 'title',
+  prompt: 'prompt',
   level: 'level',
+  order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -155,7 +184,7 @@ export type VerificationTokenScalarFieldEnum = (typeof VerificationTokenScalarFi
 export const UserProgressScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  questionId: 'questionId',
+  lessonPartId: 'lessonPartId',
   completed: 'completed',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -18,18 +18,33 @@ export default async function InterviewPage({ searchParams }: Props) {
     },
   });
 
- const questions = await prisma.question.findMany({
+const questions = await prisma.question.findMany({
   where: {
-    topic: topic
+    level: level || undefined,
+
+    lessonPart: topic
       ? {
-          slug: topic,
+          lesson: {
+            topic: {
+              slug: topic,
+            },
+          },
         }
       : undefined,
-    level: level || undefined,
   },
+
   include: {
-    topic: true,
+    lessonPart: {
+      include: {
+        lesson: {
+          include: {
+            topic: true,
+          },
+        },
+      },
+    },
   },
+
   take: 1,
 });
 
@@ -73,40 +88,39 @@ const randomQuestion = questions[0];
         </button>
       </form>
 
-      {!randomQuestion ? (
-        <p className="text-gray-500">No questions found.</p>
-      ) : (
-        <section className="rounded-xl border p-6 shadow-sm">
-          <p className="mb-2 text-sm text-gray-500">
-            {randomQuestion.topic.name} · {randomQuestion.level}
-          </p>
+{!randomQuestion ? (
+  <p className="text-gray-500">No questions found.</p>
+) : (
+  <section className="rounded-xl border p-6 shadow-sm">
+    <p className="mb-2 text-sm text-gray-500">
+      {randomQuestion.lessonPart.lesson.topic.name} ·{" "}
+      {randomQuestion.lessonPart.lesson.title} ·{" "}
+      {randomQuestion.lessonPart.title} ·{" "}
+      {randomQuestion.level}
+    </p>
 
-          <h2 className="mb-6 text-2xl font-semibold">
-            {randomQuestion.title}
-          </h2>
+    <h2 className="mb-6 text-2xl font-semibold">
+      {randomQuestion.title}
+    </h2>
 
-          <details className="mb-6 rounded-xl border p-5">
-            <summary className="cursor-pointer font-medium">
-              Show answer
-            </summary>
+    <details className="mb-6 rounded-xl border p-5">
+      <summary className="cursor-pointer font-medium">
+        Show prompt
+      </summary>
 
-            <p className="mt-4">{randomQuestion.answer}</p>
+      <p className="mt-4 whitespace-pre-line">
+        {randomQuestion.prompt}
+      </p>
+    </details>
 
-            {randomQuestion.explanation && (
-              <p className="mt-4 text-gray-600">
-                {randomQuestion.explanation}
-              </p>
-            )}
-          </details>
-
-          <Link
-            href={`/topics/${randomQuestion.topic.slug}/${randomQuestion.id}`}
-            className="rounded-lg bg-black px-5 py-3 text-white"
-          >
-            Open full question
-          </Link>
-        </section>
-      )}
+    <Link
+      href={`/topics/${randomQuestion.lessonPart.lesson.topic.slug}/${randomQuestion.lessonPart.lesson.slug}/${randomQuestion.lessonPart.id}`}
+      className="rounded-lg bg-black px-5 py-3 text-white"
+    >
+      Open lesson part
+    </Link>
+  </section>
+)}
     </main>
   );
 }
