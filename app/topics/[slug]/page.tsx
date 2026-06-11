@@ -71,64 +71,183 @@ export default async function TopicPage({ params }: Props) {
     return completedParts === totalParts;
   }).length;
 
+  const totalParts = topic.lessons.reduce((sum, lesson) => {
+    return sum + lesson.parts.length;
+  }, 0);
+
+  const completedParts = topic.lessons.reduce((sum, lesson) => {
+    return (
+      sum + lesson.parts.filter((part) => part.progress.length > 0).length
+    );
+  }, 0);
+
+  const topicProgress =
+    totalParts > 0 ? Math.round((completedParts / totalParts) * 100) : 0;
+
   return (
-    <main className="mx-auto max-w-5xl p-8">
-      <BackButton text="⬅️ Back" />
+    <main className="min-h-screen bg-[#041325] px-4 py-8 text-[#fff3da]">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-6">
+          <BackButton text="← Back" />
+        </div>
 
-      <h1 className="mb-2 mt-4 text-4xl font-bold">{topic.name}</h1>
+        <section className="mb-8 rounded-3xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-8 shadow-2xl">
+          <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-[#fff3da]/60">
+            Topic
+          </p>
 
-      <p className="mb-8 text-gray-500">
-        Lessons: {completedLessons} / {totalLessons} completed
-      </p>
+          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <div>
+              <h1 className="text-5xl font-bold tracking-tight">
+                {topic.name}
+              </h1>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {topic.lessons.map((lesson) => {
-          const totalParts = lesson.parts.length;
+              <p className="mt-4 max-w-2xl text-[#fff3da]/70">
+                Complete lessons step by step, review each part, and build a
+                stronger interview foundation.
+              </p>
+            </div>
 
-          const completedParts = lesson.parts.filter(
-            (part) => part.progress.length > 0,
-          ).length;
+            <div className="rounded-2xl border border-[#fff3da]/10 bg-[#041325]/60 p-5 lg:min-w-64">
+              <p className="text-sm text-[#fff3da]/60">Topic progress</p>
 
-          const lessonProgress =
-            totalParts > 0
-              ? Math.round((completedParts / totalParts) * 100)
-              : 0;
+              <div className="mt-2 flex items-end justify-between gap-4">
+                <h2 className="text-4xl font-bold">{topicProgress}%</h2>
 
-          return (
-            <Link
-              key={lesson.id}
-              href={`/topics/${topic.slug}/${lesson.slug}`}
-              className="group rounded-2xl border border-slate-200 bg-mist-300 p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-slate-400 hover:shadow-lg"
-            >
-              <div className="mb-3 flex items-center justify-between">
-                <h2 className="text-xl font-semibold">{lesson.title}</h2>
-
-                <span className="rounded-full bg-slate-800 px-3 py-1 text-sm text-white">
-                  {lessonProgress}%
-                </span>
+                <p className="pb-1 text-sm text-[#fff3da]/60">
+                  {completedParts} / {totalParts} parts
+                </p>
               </div>
 
-              {lesson.description && (
-                <p className="mb-4 mt-2 line-clamp-3 text-sm text-gray-500">
-                  {lesson.description}
-                </p>
-              )}
-
-              <p className="mb-3 text-sm text-gray-500">
-                {completedParts} / {totalParts} parts completed
-              </p>
-
-              <div className="h-2 overflow-hidden rounded-full bg-slate-300">
+              <div className="mt-4 h-3 overflow-hidden rounded-full bg-[#fff3da]/10">
                 <div
-                  className="h-full bg-green-600 transition-all"
+                  className="h-full rounded-full bg-[#fff3da]"
                   style={{
-                    width: `${lessonProgress}%`,
+                    width: `${topicProgress}%`,
                   }}
                 />
               </div>
-            </Link>
-          );
-        })}
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-8 grid gap-4 md:grid-cols-3">
+          <div className="rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6">
+            <p className="text-sm text-[#fff3da]/60">Lessons completed</p>
+            <h2 className="mt-2 text-4xl font-bold">
+              {completedLessons}/{totalLessons}
+            </h2>
+          </div>
+
+          <div className="rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6">
+            <p className="text-sm text-[#fff3da]/60">Completed parts</p>
+            <h2 className="mt-2 text-4xl font-bold">
+              {completedParts}/{totalParts}
+            </h2>
+          </div>
+
+          <Link
+            href="/interview"
+            className="rounded-2xl border border-[#fff3da]/10 bg-[#fff3da] p-6 text-[#041325] transition hover:scale-[1.02] hover:bg-white"
+          >
+            <p className="text-sm font-medium opacity-70">Ready to test?</p>
+            <h2 className="mt-2 text-2xl font-bold">Start interview →</h2>
+          </Link>
+        </section>
+
+        <section>
+          <div className="mb-5 flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-bold">Lessons</h2>
+              <p className="mt-1 text-sm text-[#fff3da]/60">
+                Follow the lesson order and complete every part.
+              </p>
+            </div>
+
+            <span className="rounded-full border border-[#fff3da]/10 bg-[#fff3da]/5 px-4 py-2 text-sm text-[#fff3da]/70">
+              {totalLessons} lessons
+            </span>
+          </div>
+
+          {topic.lessons.length === 0 ? (
+            <div className="rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6">
+              <p className="text-[#fff3da]/70">
+                No lessons have been added to this topic yet.
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {topic.lessons.map((lesson) => {
+                const lessonTotalParts = lesson.parts.length;
+
+                const lessonCompletedParts = lesson.parts.filter(
+                  (part) => part.progress.length > 0,
+                ).length;
+
+                const lessonProgress =
+                  lessonTotalParts > 0
+                    ? Math.round(
+                        (lessonCompletedParts / lessonTotalParts) * 100,
+                      )
+                    : 0;
+
+                return (
+                  <Link
+                    key={lesson.id}
+                    href={`/topics/${topic.slug}/${lesson.slug}`}
+                    className="group rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6 shadow-lg transition hover:-translate-y-1 hover:bg-[#fff3da]/10"
+                  >
+                    <div className="mb-4 flex items-start justify-between gap-4">
+                      <div>
+                        <p className="mb-2 text-xs uppercase tracking-[0.25em] text-[#fff3da]/40">
+                          Lesson
+                        </p>
+
+                        <h3 className="text-xl font-semibold">
+                          {lesson.title}
+                        </h3>
+                      </div>
+
+                      <span className="shrink-0 rounded-full bg-[#fff3da]/10 px-3 py-1 text-sm text-[#fff3da]/80">
+                        {lessonProgress}%
+                      </span>
+                    </div>
+
+                    {lesson.description && (
+                      <p className="mb-5 line-clamp-3 text-sm text-[#fff3da]/60">
+                        {lesson.description}
+                      </p>
+                    )}
+
+                    <p className="mb-3 text-sm text-[#fff3da]/55">
+                      {lessonCompletedParts} / {lessonTotalParts} parts
+                      completed
+                    </p>
+
+                    <div className="h-3 overflow-hidden rounded-full bg-[#fff3da]/10">
+                      <div
+                        className="h-full rounded-full bg-[#fff3da] transition-all group-hover:bg-white"
+                        style={{
+                          width: `${lessonProgress}%`,
+                        }}
+                      />
+                    </div>
+
+                    <div className="mt-5 flex items-center justify-between">
+                      <span className="text-sm font-medium text-[#fff3da]/75">
+                        Open lesson
+                      </span>
+
+                      <span className="rounded-full bg-[#fff3da]/10 px-3 py-1 text-sm transition group-hover:bg-[#fff3da] group-hover:text-[#041325]">
+                        →
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </section>
       </div>
     </main>
   );

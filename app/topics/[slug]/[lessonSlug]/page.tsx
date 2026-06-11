@@ -32,7 +32,6 @@ export default async function LessonPage({ params }: Props) {
       },
     },
     include: {
-      topic: true,
       parts: {
         orderBy: {
           order: "asc",
@@ -49,17 +48,15 @@ export default async function LessonPage({ params }: Props) {
     },
   });
 
-  if (!lesson) {
+  if (!lesson || lesson.parts.length === 0) {
     notFound();
   }
 
-  const firstIncomplete =
-    lesson.parts.find((part) => part.progress.length === 0) ??
-    lesson.parts[0];
+  const firstIncompletePart = lesson.parts.find(
+    (part) => part.progress.length === 0,
+  );
 
-  if (!firstIncomplete) {
-    notFound();
-  }
+  const targetPart = firstIncompletePart ?? lesson.parts[0];
 
-  redirect(`/topics/${slug}/${lessonSlug}/${firstIncomplete.id}`);
+  redirect(`/topics/${slug}/${lessonSlug}/${targetPart.id}`);
 }
