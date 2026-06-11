@@ -13,7 +13,9 @@ export default async function EditQuestionPage({ params }: Props) {
   const { id } = await params;
 
   const question = await prisma.question.findUnique({
-    where: { id },
+    where: {
+      id,
+    },
     include: {
       lessonPart: true,
     },
@@ -56,18 +58,20 @@ export default async function EditQuestionPage({ params }: Props) {
 
       <form
         action={updateQuestion}
-        className="rounded-xl border p-6 shadow-sm"
+        className="rounded-2xl border border-border bg-card p-6 shadow-sm"
       >
         <input type="hidden" name="id" value={question.id} />
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Lesson Part</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Lesson Part
+          </label>
 
           <select
             name="lessonPartId"
             required
             defaultValue={question.lessonPartId}
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
           >
             {parts.map((part) => (
               <option key={part.id} value={part.id}>
@@ -78,47 +82,55 @@ export default async function EditQuestionPage({ params }: Props) {
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Question title</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Question title
+          </label>
 
           <input
             name="title"
             required
             defaultValue={question.title}
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition placeholder:text-muted focus:border-primary"
           />
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Prompt</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Prompt
+          </label>
 
           <textarea
             name="prompt"
             required
             rows={6}
             defaultValue={question.prompt}
-            className="w-full rounded-lg border p-3 font-mono"
+            className="w-full rounded-xl border border-border bg-background p-3 font-mono text-foreground outline-none transition placeholder:text-muted focus:border-primary"
           />
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Order</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Order
+          </label>
 
           <input
             name="order"
             type="number"
             defaultValue={question.order}
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
           />
         </div>
 
         <div className="mb-6">
-          <label className="mb-2 block font-medium">Level</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Level
+          </label>
 
           <select
             name="level"
             required
             defaultValue={question.level}
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
           >
             <option value={Level.JUNIOR}>Junior</option>
             <option value={Level.MIDDLE}>Middle</option>
@@ -128,7 +140,7 @@ export default async function EditQuestionPage({ params }: Props) {
 
         <button
           type="submit"
-          className="rounded-lg bg-black px-5 py-3 text-white transition hover:opacity-80"
+          className="rounded-xl bg-primary px-5 py-3 font-semibold text-primary-foreground transition hover:scale-[1.02]"
         >
           Save Changes
         </button>

@@ -10,10 +10,10 @@ export default async function InterviewPage() {
   });
 
   return (
-    <main className="min-h-screen bg-[#041325] px-4 py-8 text-[#fff3da]">
+    <main className="min-h-screen bg-background px-4 py-8 text-foreground">
       <div className="mx-auto max-w-4xl">
-        <section className="mb-8 rounded-3xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-8 shadow-2xl">
-          <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-[#fff3da]/60">
+        <section className="mb-8 rounded-3xl border border-border bg-card p-8 shadow-2xl">
+          <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-muted">
             Mock interview
           </p>
 
@@ -21,7 +21,7 @@ export default async function InterviewPage() {
             Interview Training
           </h1>
 
-          <p className="mt-4 max-w-2xl text-[#fff3da]/70">
+          <p className="mt-4 max-w-2xl text-muted">
             Choose your mode, topics, level, and question count. Your answers
             will be evaluated by AI after the interview.
           </p>
@@ -29,16 +29,16 @@ export default async function InterviewPage() {
 
         <form
           action={startInterview}
-          className="rounded-3xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6 shadow-xl"
+          className="rounded-3xl border border-border bg-card p-6 shadow-xl"
         >
-          <div className="mb-6 rounded-2xl border border-[#fff3da]/10 bg-[#041325]/60 p-5">
-            <label className="mb-2 block text-sm font-semibold text-[#fff3da]/80">
+          <div className="mb-6 rounded-2xl border border-border bg-background p-5">
+            <label className="mb-2 block text-sm font-semibold text-gray-200">
               Mode
             </label>
 
             <select
               name="mode"
-              className="w-full rounded-xl border border-[#fff3da]/10 bg-[#041325] p-3 text-[#fff3da] outline-none transition focus:border-[#fff3da]/50"
+              className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
             >
               <option value="PRACTICE">Practice · no pressure</option>
               <option value="REAL">Real interview · 90 sec/question</option>
@@ -46,12 +46,12 @@ export default async function InterviewPage() {
             </select>
           </div>
 
-          <div className="mb-6 rounded-2xl border border-[#fff3da]/10 bg-[#041325]/60 p-5">
-            <label className="mb-2 block text-sm font-semibold text-[#fff3da]/80">
+          <div className="mb-6 rounded-2xl border border-border bg-background p-5">
+            <label className="mb-2 block text-sm font-semibold text-gray-200">
               Topics
             </label>
 
-            <p className="mb-4 text-sm text-[#fff3da]/55">
+            <p className="mb-4 text-sm text-muted">
               Leave empty to use all topics.
             </p>
 
@@ -59,13 +59,13 @@ export default async function InterviewPage() {
               {topics.map((topic) => (
                 <label
                   key={topic.id}
-                  className="flex cursor-pointer items-center gap-3 rounded-xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-3 text-sm transition hover:bg-[#fff3da]/10"
+                  className="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-card p-3 text-sm transition hover:bg-card-hover"
                 >
                   <input
                     type="checkbox"
                     name="topics"
                     value={topic.slug}
-                    className="h-4 w-4 accent-[#fff3da]"
+                    className="h-4 w-4 accent-primary"
                   />
 
                   <span>{topic.name}</span>
@@ -75,14 +75,14 @@ export default async function InterviewPage() {
           </div>
 
           <div className="mb-6 grid gap-6 md:grid-cols-2">
-            <div className="rounded-2xl border border-[#fff3da]/10 bg-[#041325]/60 p-5">
-              <label className="mb-2 block text-sm font-semibold text-[#fff3da]/80">
+            <div className="rounded-2xl border border-border bg-background p-5">
+              <label className="mb-2 block text-sm font-semibold text-gray-200">
                 Level
               </label>
 
               <select
                 name="level"
-                className="w-full rounded-xl border border-[#fff3da]/10 bg-[#041325] p-3 text-[#fff3da] outline-none transition focus:border-[#fff3da]/50"
+                className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
               >
                 <option value="">All levels</option>
                 <option value={Level.JUNIOR}>Junior</option>
@@ -91,15 +91,15 @@ export default async function InterviewPage() {
               </select>
             </div>
 
-            <div className="rounded-2xl border border-[#fff3da]/10 bg-[#041325]/60 p-5">
-              <label className="mb-2 block text-sm font-semibold text-[#fff3da]/80">
+            <div className="rounded-2xl border border-border bg-background p-5">
+              <label className="mb-2 block text-sm font-semibold text-gray-200">
                 Number of questions
               </label>
 
               <select
                 name="questionCount"
                 defaultValue="5"
-                className="w-full rounded-xl border border-[#fff3da]/10 bg-[#041325] p-3 text-[#fff3da] outline-none transition focus:border-[#fff3da]/50"
+                className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
               >
                 <option value="5">5 questions · about 8 minutes</option>
                 <option value="10">10 questions · about 15 minutes</option>
@@ -111,7 +111,7 @@ export default async function InterviewPage() {
 
           <button
             type="submit"
-            className="w-full rounded-2xl bg-[#fff3da] px-6 py-4 text-lg font-bold text-[#041325] shadow-lg transition hover:scale-[1.01] hover:bg-white"
+            className="w-full rounded-2xl bg-primary px-6 py-4 text-lg font-bold text-primary-foreground shadow-lg transition hover:scale-[1.01]"
           >
             Start interview →
           </button>

@@ -99,10 +99,10 @@ export default async function DashboardPage() {
   });
 
   return (
-    <main className="min-h-screen bg-[#041325] px-4 py-8 text-[#fff3da]">
+    <main className="min-h-screen bg-background px-4 py-8 text-foreground">
       <div className="mx-auto max-w-6xl">
-        <section className="mb-8 rounded-3xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-8 shadow-2xl">
-          <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-[#fff3da]/60">
+        <section className="mb-8 rounded-3xl border border-border bg-card p-8 shadow-2xl">
+          <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-muted">
             Learning dashboard
           </p>
 
@@ -112,7 +112,7 @@ export default async function DashboardPage() {
                 Welcome back 👋
               </h1>
 
-              <p className="mt-4 max-w-2xl text-[#fff3da]/70">
+              <p className="mt-4 max-w-2xl text-muted">
                 Track your lessons, review weak answers, and continue your AI
                 roadmap.
               </p>
@@ -120,7 +120,7 @@ export default async function DashboardPage() {
 
             <Link
               href="/interview"
-              className="rounded-2xl bg-[#fff3da] px-6 py-3 font-semibold text-[#041325] transition hover:scale-[1.02] hover:bg-white"
+              className="rounded-2xl bg-primary px-6 py-3 font-semibold text-primary-foreground transition hover:scale-[1.02]"
             >
               Start interview
             </Link>
@@ -128,16 +128,18 @@ export default async function DashboardPage() {
         </section>
 
         <section className="mb-8 grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6">
-            <p className="text-sm text-[#fff3da]/60">Overall progress</p>
+          <div className="rounded-2xl border border-border bg-card p-6">
+            <p className="text-sm text-muted">Overall progress</p>
+
             <h2 className="mt-2 text-4xl font-bold">{overallProgress}%</h2>
-            <p className="mt-2 text-sm text-[#fff3da]/60">
+
+            <p className="mt-2 text-sm text-muted">
               {completedParts} / {totalParts} lesson parts completed
             </p>
 
-            <div className="mt-5 h-3 overflow-hidden rounded-full bg-[#fff3da]/10">
+            <div className="mt-5 h-3 overflow-hidden rounded-full bg-secondary">
               <div
-                className="h-full rounded-full bg-[#fff3da]"
+                className="h-full rounded-full bg-success"
                 style={{
                   width: `${overallProgress}%`,
                 }}
@@ -145,18 +147,22 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6">
-            <p className="text-sm text-[#fff3da]/60">Started topics</p>
+          <div className="rounded-2xl border border-border bg-card p-6">
+            <p className="text-sm text-muted">Started topics</p>
+
             <h2 className="mt-2 text-4xl font-bold">{startedTopics.length}</h2>
-            <p className="mt-2 text-sm text-[#fff3da]/60">
+
+            <p className="mt-2 text-sm text-muted">
               Topics with at least one completed part
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6">
-            <p className="text-sm text-[#fff3da]/60">Weak answers</p>
+          <div className="rounded-2xl border border-border bg-card p-6">
+            <p className="text-sm text-muted">Weak answers</p>
+
             <h2 className="mt-2 text-4xl font-bold">{weakAnswers.length}</h2>
-            <p className="mt-2 text-sm text-[#fff3da]/60">
+
+            <p className="mt-2 text-sm text-muted">
               Answers below 8/10 that need review
             </p>
           </div>
@@ -166,28 +172,27 @@ export default async function DashboardPage() {
           <div className="mb-4 flex items-center justify-between gap-4">
             <div>
               <h2 className="text-2xl font-bold">Your topics</h2>
-              <p className="mt-1 text-sm text-[#fff3da]/60">
+
+              <p className="mt-1 text-sm text-muted">
                 Continue from where you stopped.
               </p>
             </div>
 
             <Link
               href="/topics"
-              className="rounded-xl border border-[#fff3da]/15 px-4 py-2 text-sm text-[#fff3da]/80 transition hover:bg-[#fff3da]/10"
+              className="rounded-xl border border-border px-4 py-2 text-sm text-muted transition hover:bg-card-hover"
             >
               View all topics
             </Link>
           </div>
 
           {startedTopics.length === 0 ? (
-            <div className="rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6">
-              <p className="text-[#fff3da]/70">
-                You have not started any topic yet.
-              </p>
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <p className="text-muted">You have not started any topic yet.</p>
 
               <Link
                 href="/topics"
-                className="mt-4 inline-block rounded-xl bg-[#fff3da] px-5 py-3 font-semibold text-[#041325]"
+                className="mt-4 inline-block rounded-xl bg-primary px-5 py-3 font-semibold text-primary-foreground"
               >
                 Start learning
               </Link>
@@ -202,6 +207,7 @@ export default async function DashboardPage() {
                 ).length;
 
                 const total = parts.length;
+
                 const topicProgress =
                   total > 0 ? Math.round((completed / total) * 100) : 0;
 
@@ -209,27 +215,25 @@ export default async function DashboardPage() {
                   <Link
                     key={topic.id}
                     href={`/topics/${topic.slug}`}
-                    className="group rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6 shadow-lg transition hover:-translate-y-1 hover:bg-[#fff3da]/10"
+                    className="group rounded-2xl border border-border bg-card p-6 shadow-lg transition hover:-translate-y-1 hover:bg-card-hover"
                   >
                     <div className="mb-4 flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="text-xl font-semibold">
-                          {topic.name}
-                        </h3>
+                        <h3 className="text-xl font-semibold">{topic.name}</h3>
 
-                        <p className="mt-1 text-sm text-[#fff3da]/60">
+                        <p className="mt-1 text-sm text-muted">
                           {completed} of {total} parts completed
                         </p>
                       </div>
 
-                      <span className="rounded-full bg-[#fff3da]/10 px-3 py-1 text-sm text-[#fff3da]/80">
+                      <span className="rounded-full bg-secondary px-3 py-1 text-sm text-gray-200">
                         {topicProgress}%
                       </span>
                     </div>
 
-                    <div className="h-3 overflow-hidden rounded-full bg-[#fff3da]/10">
+                    <div className="h-3 overflow-hidden rounded-full bg-secondary">
                       <div
-                        className="h-full rounded-full bg-[#fff3da] transition-all group-hover:bg-white"
+                        className="h-full rounded-full bg-success transition-all"
                         style={{
                           width: `${topicProgress}%`,
                         }}
@@ -242,19 +246,20 @@ export default async function DashboardPage() {
           )}
         </section>
 
-        <section className="mb-8 rounded-3xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6">
+        <section className="mb-8 rounded-3xl border border-border bg-card p-6">
           <div className="mb-5 flex items-center justify-between gap-4">
             <div>
               <h2 className="text-2xl font-bold">Weak answers</h2>
-              <p className="mt-1 text-sm text-[#fff3da]/60">
+
+              <p className="mt-1 text-sm text-muted">
                 Review these answers to improve your interview score.
               </p>
             </div>
           </div>
 
           {weakAnswers.length === 0 ? (
-            <div className="rounded-2xl border border-[#fff3da]/10 bg-[#041325]/60 p-5">
-              <p className="text-[#fff3da]/70">
+            <div className="rounded-2xl border border-border bg-background p-5">
+              <p className="text-muted">
                 No weak answers yet. Complete an interview to get personalized
                 feedback.
               </p>
@@ -271,7 +276,7 @@ export default async function DashboardPage() {
                 return (
                   <article
                     key={answer.id}
-                    className="rounded-2xl border border-[#fff3da]/10 bg-[#041325]/70 p-5 transition hover:bg-[#fff3da]/10"
+                    className="rounded-2xl border border-border bg-background p-5 transition hover:bg-card-hover"
                   >
                     <div className="mb-3 flex items-start justify-between gap-4">
                       <div>
@@ -279,25 +284,25 @@ export default async function DashboardPage() {
                           {answer.question.title}
                         </h3>
 
-                        <p className="mt-1 text-sm text-[#fff3da]/55">
+                        <p className="mt-1 text-sm text-muted">
                           {topic.name} / {lesson.title} / {part.title}
                         </p>
                       </div>
 
-                      <span className="shrink-0 rounded-full bg-red-500/20 px-3 py-1 text-sm font-medium text-red-200">
+                      <span className="shrink-0 rounded-full bg-danger-light px-3 py-1 text-sm font-medium text-gray-100">
                         {answer.aiScore}/10
                       </span>
                     </div>
 
                     {answer.aiFeedback && (
-                      <p className="mb-4 line-clamp-2 text-sm text-[#fff3da]/65">
+                      <p className="mb-4 line-clamp-2 text-sm text-muted">
                         {answer.aiFeedback}
                       </p>
                     )}
 
                     <Link
                       href={`/topics/${topic.slug}/${lesson.slug}/${part.id}`}
-                      className="inline-block rounded-xl bg-[#fff3da] px-4 py-2 text-sm font-semibold text-[#041325] transition hover:bg-white"
+                      className="inline-block rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition"
                     >
                       Review lesson
                     </Link>
@@ -308,33 +313,34 @@ export default async function DashboardPage() {
           )}
         </section>
 
-        <section className="rounded-3xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6 shadow-xl">
+        <section className="rounded-3xl border border-border bg-card p-6 shadow-xl">
           <div className="mb-5 flex items-center justify-between gap-4">
             <div>
               <h2 className="text-2xl font-bold">Your AI Roadmap</h2>
-              <p className="mt-1 text-sm text-[#fff3da]/60">
+
+              <p className="mt-1 text-sm text-muted">
                 Personalized plan based on your weak interview answers.
               </p>
             </div>
 
             <Link
               href="/roadmaps"
-              className="rounded-xl border border-[#fff3da]/15 px-4 py-2 text-sm text-[#fff3da]/80 transition hover:bg-[#fff3da]/10"
+              className="rounded-xl border border-border px-4 py-2 text-sm text-muted transition hover:bg-card-hover"
             >
               View all
             </Link>
           </div>
 
           {!latestRoadmap ? (
-            <div className="rounded-2xl border border-[#fff3da]/10 bg-[#041325]/70 p-5">
-              <p className="text-sm text-[#fff3da]/70">
+            <div className="rounded-2xl border border-border bg-background p-5">
+              <p className="text-sm text-muted">
                 You do not have a roadmap yet. Complete an interview and
                 generate your first AI roadmap.
               </p>
 
               <Link
                 href="/interview"
-                className="mt-4 inline-block rounded-xl bg-[#fff3da] px-5 py-3 text-sm font-semibold text-[#041325] transition hover:bg-white"
+                className="mt-4 inline-block rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition"
               >
                 Start interview
               </Link>
@@ -342,18 +348,18 @@ export default async function DashboardPage() {
           ) : (
             <Link
               href={`/roadmaps/${latestRoadmap.id}`}
-              className="block rounded-2xl border border-[#fff3da]/10 bg-[#041325]/70 p-5 transition hover:-translate-y-1 hover:bg-[#fff3da]/10"
+              className="block rounded-2xl border border-border bg-background p-5 transition hover:-translate-y-1 hover:bg-card-hover"
             >
               <h3 className="mb-2 text-xl font-semibold">
                 {latestRoadmap.title}
               </h3>
 
-              <p className="line-clamp-3 text-sm text-[#fff3da]/65">
+              <p className="line-clamp-3 text-sm text-muted">
                 {latestRoadmap.summary ??
                   "Personalized roadmap based on your weak interview answers."}
               </p>
 
-              <p className="mt-4 text-xs text-[#fff3da]/45">
+              <p className="mt-4 text-xs text-gray-400">
                 Created {latestRoadmap.createdAt.toLocaleDateString()}
               </p>
             </Link>

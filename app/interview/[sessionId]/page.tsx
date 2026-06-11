@@ -61,36 +61,48 @@ export default async function InterviewSessionPage({ params }: Props) {
   }
 
   const currentIndex = interview.answers.findIndex(
-  (answer) => !answer.answerText?.trim(),
-);
+    (answer) => !answer.answerText?.trim(),
+  );
 
+  const currentAnswer =
+    currentIndex === -1 ? null : interview.answers[currentIndex];
 
-const currentAnswer =
-  currentIndex === -1 ? null : interview.answers[currentIndex];
-
-const answeredCount = interview.answers.filter(
-  (answer) => answer.answerText?.trim(),
-).length;
+  const answeredCount = interview.answers.filter((answer) =>
+    answer.answerText?.trim(),
+  ).length;
 
   const progress = Math.round((answeredCount / interview.answers.length) * 100);
 
   if (!currentAnswer) {
     return (
-      <main className="mx-auto max-w-3xl p-8">
-        <h1 className="mb-4 text-4xl font-bold">Interview completed</h1>
+      <main className="min-h-screen bg-background px-4 py-8 text-foreground">
+        <div className="mx-auto max-w-3xl">
+          <section className="rounded-3xl border border-border bg-card p-8 shadow-2xl">
+            <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-muted">
+              Interview completed
+            </p>
 
-        <form action={finishInterview}>
-          <input type="hidden" name="sessionId" value={interview.id} />
+            <h1 className="mb-4 text-4xl font-bold">
+              Interview completed 🎉
+            </h1>
 
-          <button className="rounded-lg bg-black px-5 py-3 text-white">
-            View result
-          </button>
-        </form>
+            <p className="mb-6 text-muted">
+              You answered all questions. Open your result to review your score,
+              feedback, and weak areas.
+            </p>
+
+            <form action={finishInterview}>
+              <input type="hidden" name="sessionId" value={interview.id} />
+
+              <button className="rounded-xl bg-primary px-5 py-3 font-semibold text-primary-foreground transition hover:scale-[1.02]">
+                View result
+              </button>
+            </form>
+          </section>
+        </div>
       </main>
     );
   }
-
-
 
   const question = currentAnswer.question;
   const topic = question.lessonPart.lesson.topic;
@@ -98,52 +110,58 @@ const answeredCount = interview.answers.filter(
   const part = question.lessonPart;
 
   return (
-    <main className="mx-auto max-w-3xl p-8">
-      <Link
-        href="/interview"
-        className="mb-6 inline-block rounded-lg border px-4 py-2"
-      >
-        ← Exit interview
-      </Link>
+    <main className="min-h-screen bg-background px-4 py-8 text-foreground">
+      <div className="mx-auto max-w-3xl">
+        <Link
+          href="/interview"
+          className="mb-6 inline-block rounded-xl border border-border px-4 py-2 text-sm text-muted transition hover:bg-card-hover"
+        >
+          ← Exit interview
+        </Link>
 
-      <div className="mb-8 rounded-xl border p-5">
-        <div className="mb-2 flex items-center justify-between">
-          <p className="font-semibold">
-            Question {answeredCount + 1} / {interview.answers.length}
+        <section className="mb-8 rounded-3xl border border-border bg-card p-5 shadow-xl">
+          <div className="mb-3 flex items-center justify-between gap-4">
+            <p className="font-semibold">
+              Question {answeredCount + 1} / {interview.answers.length}
+            </p>
+
+            <p className="font-semibold">{progress}%</p>
+          </div>
+
+          <div className="h-3 overflow-hidden rounded-full bg-secondary">
+            <div
+              className="h-full rounded-full bg-success transition-all"
+              style={{
+                width: `${progress}%`,
+              }}
+            />
+          </div>
+        </section>
+
+        <section className="mb-8 rounded-3xl border border-border bg-card p-6 shadow-xl">
+          <p className="mb-2 text-sm text-muted">
+            {topic.name} / {lesson.title} / {part.title}
           </p>
 
-          <p className="font-semibold">{progress}%</p>
-        </div>
+          <h1 className="mb-6 text-3xl font-bold">{question.title}</h1>
 
-        <div className="h-3 overflow-hidden rounded-full bg-slate-300">
-          <div
-            className="h-full bg-green-600"
-            style={{
-              width: `${progress}%`,
-            }}
-          />
-        </div>
+          <div className="rounded-2xl border border-border bg-background p-5">
+            <MarkdownContent content={question.prompt} />
+          </div>
+        </section>
+
+        <InterviewAnswerForm
+          interviewAnswerId={currentAnswer.id}
+          sessionId={interview.id}
+          secondsLimit={
+            interview.mode === "HARD"
+              ? 60
+              : interview.mode === "REAL"
+                ? 90
+                : 0
+          }
+        />
       </div>
-
-      <section className="mb-8 rounded-xl border p-6">
-        <p className="mb-2 text-sm text-gray-500">
-          {topic.name} / {lesson.title} / {part.title}
-        </p>
-        <h1 className="mb-6 text-3xl font-bold">{question.title}</h1>
-        <MarkdownContent content={question.prompt} />{" "}
-      </section>
-
-<InterviewAnswerForm
-  interviewAnswerId={currentAnswer.id}
-  sessionId={interview.id}
-  secondsLimit={
-    interview.mode === "HARD"
-      ? 60
-      : interview.mode === "REAL"
-        ? 90
-        : 0
-  }
-/>
     </main>
   );
 }

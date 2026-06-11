@@ -76,7 +76,6 @@ export default async function LessonPartPage({ params }: Props) {
   const nextPart = parts[currentIndex + 1];
 
   const total = parts.length;
-
   const completed = parts.filter((item) => item.progress.length > 0).length;
 
   const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
@@ -102,29 +101,27 @@ export default async function LessonPartPage({ params }: Props) {
   });
 
   return (
-    <main className="min-h-screen bg-[#041325] px-4 py-8 text-[#fff3da]">
+    <main className="min-h-screen bg-background px-4 py-8 text-foreground">
       <div className="mx-auto max-w-4xl">
         <Link
           href={`/topics/${slug}`}
-          className="mb-6 inline-block rounded-xl border border-[#fff3da]/15 px-4 py-2 text-sm text-[#fff3da]/80 transition hover:bg-[#fff3da]/10"
+          className="mb-6 inline-block rounded-xl border border-border px-4 py-2 text-sm text-muted transition hover:bg-card-hover"
         >
           ← Back to {part.lesson.topic.name}
         </Link>
 
-        <section className="mb-8 rounded-3xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6 shadow-xl">
+        <section className="mb-8 rounded-3xl border border-border bg-card p-6 shadow-xl">
           <div className="mb-5 flex items-center justify-between gap-4">
             <div>
-              <p className="mb-2 text-sm font-medium uppercase tracking-[0.25em] text-[#fff3da]/50">
+              <p className="mb-2 text-sm font-medium uppercase tracking-[0.25em] text-muted">
                 Lesson progress
               </p>
 
-              <h2 className="text-xl font-semibold">
-                {part.lesson.title}
-              </h2>
+              <h2 className="text-xl font-semibold">{part.lesson.title}</h2>
             </div>
 
             <div className="text-right">
-              <p className="text-sm text-[#fff3da]/60">
+              <p className="text-sm text-muted">
                 {completed} / {total}
               </p>
 
@@ -132,9 +129,9 @@ export default async function LessonPartPage({ params }: Props) {
             </div>
           </div>
 
-          <div className="h-3 overflow-hidden rounded-full bg-[#fff3da]/10">
+          <div className="h-3 overflow-hidden rounded-full bg-secondary">
             <div
-              className="h-full rounded-full bg-[#fff3da] transition-all"
+              className="h-full rounded-full bg-success transition-all"
               style={{
                 width: `${progress}%`,
               }}
@@ -142,35 +139,33 @@ export default async function LessonPartPage({ params }: Props) {
           </div>
         </section>
 
-        <section className="mb-8 rounded-3xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-8 shadow-2xl">
-          <p className="mb-3 text-sm text-[#fff3da]/55">
+        <section className="mb-8 rounded-3xl border border-border bg-card p-8 shadow-2xl">
+          <p className="mb-3 text-sm text-muted">
             {part.lesson.topic.name} / {part.lesson.title}
           </p>
 
-          <h1 className="text-5xl font-bold tracking-tight">
-            {part.title}
-          </h1>
+          <h1 className="text-5xl font-bold tracking-tight">{part.title}</h1>
 
-          <p className="mt-4 max-w-2xl text-[#fff3da]/65">
+          <p className="mt-4 max-w-2xl text-muted">
             Read the material, practice the questions, and mark this part as
             completed when you feel confident.
           </p>
         </section>
 
-        <section className="mb-8 rounded-3xl border border-[#fff3da]/10 bg-[#fff3da] p-8 text-[#041325] shadow-2xl">
+        <section className="mb-8 rounded-3xl border border-border bg-primary p-8 text-primary-foreground shadow-2xl">
           <MarkdownContent content={part.content} />
         </section>
 
         {part.questions.length > 0 && (
-          <section className="mb-8 rounded-3xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6 shadow-xl">
+          <section className="mb-8 rounded-3xl border border-border bg-card p-6 shadow-xl">
             <div className="mb-6">
-              <p className="mb-2 text-sm font-medium uppercase tracking-[0.25em] text-[#fff3da]/50">
+              <p className="mb-2 text-sm font-medium uppercase tracking-[0.25em] text-muted">
                 Practice
               </p>
 
               <h2 className="text-3xl font-bold">Practice questions</h2>
 
-              <p className="mt-2 text-sm text-[#fff3da]/60">
+              <p className="mt-2 text-sm text-muted">
                 Write your answer, then use AI feedback to improve it.
               </p>
             </div>
@@ -184,13 +179,13 @@ export default async function LessonPartPage({ params }: Props) {
                 return (
                   <div
                     key={question.id}
-                    className="rounded-2xl border border-[#fff3da]/10 bg-[#041325]/70 p-5"
+                    className="rounded-2xl border border-border bg-background p-5"
                   >
                     <h3 className="mb-3 text-xl font-semibold">
                       {question.title}
                     </h3>
 
-                    <div className="mb-5 rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-4">
+                    <div className="mb-5 rounded-2xl border border-border bg-card p-4">
                       <MarkdownContent content={question.prompt} />
                     </div>
 
@@ -215,7 +210,7 @@ export default async function LessonPartPage({ params }: Props) {
 
           <button
             type="submit"
-            className="w-full rounded-2xl bg-[#fff3da] px-6 py-4 text-lg font-bold text-[#041325] shadow-lg transition hover:scale-[1.01] hover:bg-white"
+            className="w-full rounded-2xl bg-primary px-6 py-4 text-lg font-bold text-primary-foreground shadow-lg transition hover:scale-[1.01]"
           >
             {nextPart ? "Continue →" : "Finish lesson"}
           </button>

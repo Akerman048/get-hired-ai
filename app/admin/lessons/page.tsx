@@ -37,15 +37,17 @@ export default async function AdminLessonsPage() {
 
       <form
         action={createLesson}
-        className="mb-10 rounded-xl border p-6 shadow-sm"
+        className="mb-10 rounded-2xl border border-border bg-card p-6 shadow-sm"
       >
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Topic</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Topic
+          </label>
 
           <select
             name="topicId"
             required
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
           >
             {topics.map((topic) => (
               <option key={topic.id} value={topic.id}>
@@ -56,41 +58,47 @@ export default async function AdminLessonsPage() {
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Lesson title</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Lesson title
+          </label>
 
           <input
             name="title"
             required
             placeholder="Variables"
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition placeholder:text-muted focus:border-primary"
           />
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Description</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Description
+          </label>
 
           <textarea
             name="description"
             rows={8}
             placeholder="Markdown description..."
-            className="w-full rounded-lg border p-3 font-mono"
+            className="w-full rounded-xl border border-border bg-background p-3 font-mono text-foreground outline-none transition placeholder:text-muted focus:border-primary"
           />
         </div>
 
         <div className="mb-6">
-          <label className="mb-2 block font-medium">Order</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Order
+          </label>
 
           <input
             name="order"
             type="number"
             defaultValue={0}
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
           />
         </div>
 
         <button
           type="submit"
-          className="rounded-lg bg-black px-5 py-3 text-white transition hover:opacity-80"
+          className="rounded-xl bg-primary px-5 py-3 font-semibold text-primary-foreground transition hover:scale-[1.02]"
         >
           Create Lesson
         </button>
@@ -103,27 +111,27 @@ export default async function AdminLessonsPage() {
           {lessons.map((lesson) => (
             <article
               key={lesson.id}
-              className="rounded-xl border p-5 shadow-sm"
+              className="rounded-2xl border border-border bg-card p-5 shadow-sm"
             >
               <div className="mb-3 flex items-start justify-between gap-4">
                 <div>
                   <h3 className="font-semibold">{lesson.title}</h3>
 
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted">
                     {lesson.topic.name} / {lesson.slug}
                   </p>
 
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted">
                     Parts: {lesson._count.parts}
                   </p>
 
-                  <p className="text-sm text-gray-500">Order: {lesson.order}</p>
+                  <p className="text-sm text-muted">Order: {lesson.order}</p>
                 </div>
 
                 <div className="flex gap-2">
                   <Link
                     href={`/admin/lessons/${lesson.id}/edit`}
-                    className="rounded-lg bg-gray-100 px-4 py-2 text-sm transition hover:bg-gray-200"
+                    className="rounded-xl bg-secondary px-4 py-2 text-sm transition hover:bg-card-hover"
                   >
                     Edit
                   </Link>
@@ -133,7 +141,7 @@ export default async function AdminLessonsPage() {
 
                     <button
                       type="submit"
-                      className="rounded-lg bg-red-600 px-4 py-2 text-sm text-white transition hover:opacity-80"
+                      className="rounded-xl bg-danger px-4 py-2 text-sm font-medium text-gray-100 transition hover:scale-[1.02]"
                     >
                       Delete
                     </button>
@@ -142,7 +150,7 @@ export default async function AdminLessonsPage() {
               </div>
 
               {lesson.description && (
-                <div className="mt-4 text-sm">
+                <div className="mt-4 rounded-xl border border-border bg-background p-4 text-sm">
                   <MarkdownContent content={lesson.description} />
                 </div>
               )}

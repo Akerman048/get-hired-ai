@@ -85,14 +85,14 @@ export default async function TopicPage({ params }: Props) {
     totalParts > 0 ? Math.round((completedParts / totalParts) * 100) : 0;
 
   return (
-    <main className="min-h-screen bg-[#041325] px-4 py-8 text-[#fff3da]">
+    <main className="min-h-screen bg-background px-4 py-8 text-foreground">
       <div className="mx-auto max-w-6xl">
         <div className="mb-6">
           <BackButton text="← Back" />
         </div>
 
-        <section className="mb-8 rounded-3xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-8 shadow-2xl">
-          <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-[#fff3da]/60">
+        <section className="mb-8 rounded-3xl border border-border bg-card p-8 shadow-2xl">
+          <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-muted">
             Topic
           </p>
 
@@ -102,26 +102,26 @@ export default async function TopicPage({ params }: Props) {
                 {topic.name}
               </h1>
 
-              <p className="mt-4 max-w-2xl text-[#fff3da]/70">
+              <p className="mt-4 max-w-2xl text-muted">
                 Complete lessons step by step, review each part, and build a
                 stronger interview foundation.
               </p>
             </div>
 
-            <div className="rounded-2xl border border-[#fff3da]/10 bg-[#041325]/60 p-5 lg:min-w-64">
-              <p className="text-sm text-[#fff3da]/60">Topic progress</p>
+            <div className="rounded-2xl border border-border bg-background p-5 lg:min-w-64">
+              <p className="text-sm text-muted">Topic progress</p>
 
               <div className="mt-2 flex items-end justify-between gap-4">
                 <h2 className="text-4xl font-bold">{topicProgress}%</h2>
 
-                <p className="pb-1 text-sm text-[#fff3da]/60">
+                <p className="pb-1 text-sm text-muted">
                   {completedParts} / {totalParts} parts
                 </p>
               </div>
 
-              <div className="mt-4 h-3 overflow-hidden rounded-full bg-[#fff3da]/10">
+              <div className="mt-4 h-3 overflow-hidden rounded-full bg-secondary">
                 <div
-                  className="h-full rounded-full bg-[#fff3da]"
+                  className="h-full rounded-full bg-success"
                   style={{
                     width: `${topicProgress}%`,
                   }}
@@ -132,15 +132,17 @@ export default async function TopicPage({ params }: Props) {
         </section>
 
         <section className="mb-8 grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6">
-            <p className="text-sm text-[#fff3da]/60">Lessons completed</p>
+          <div className="rounded-2xl border border-border bg-card p-6">
+            <p className="text-sm text-muted">Lessons completed</p>
+
             <h2 className="mt-2 text-4xl font-bold">
               {completedLessons}/{totalLessons}
             </h2>
           </div>
 
-          <div className="rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6">
-            <p className="text-sm text-[#fff3da]/60">Completed parts</p>
+          <div className="rounded-2xl border border-border bg-card p-6">
+            <p className="text-sm text-muted">Completed parts</p>
+
             <h2 className="mt-2 text-4xl font-bold">
               {completedParts}/{totalParts}
             </h2>
@@ -148,9 +150,10 @@ export default async function TopicPage({ params }: Props) {
 
           <Link
             href="/interview"
-            className="rounded-2xl border border-[#fff3da]/10 bg-[#fff3da] p-6 text-[#041325] transition hover:scale-[1.02] hover:bg-white"
+            className="rounded-2xl border border-border bg-primary p-6 text-primary-foreground transition hover:scale-[1.02]"
           >
             <p className="text-sm font-medium opacity-70">Ready to test?</p>
+
             <h2 className="mt-2 text-2xl font-bold">Start interview →</h2>
           </Link>
         </section>
@@ -159,19 +162,20 @@ export default async function TopicPage({ params }: Props) {
           <div className="mb-5 flex items-center justify-between gap-4">
             <div>
               <h2 className="text-2xl font-bold">Lessons</h2>
-              <p className="mt-1 text-sm text-[#fff3da]/60">
+
+              <p className="mt-1 text-sm text-muted">
                 Follow the lesson order and complete every part.
               </p>
             </div>
 
-            <span className="rounded-full border border-[#fff3da]/10 bg-[#fff3da]/5 px-4 py-2 text-sm text-[#fff3da]/70">
+            <span className="rounded-full border border-border bg-card px-4 py-2 text-sm text-muted">
               {totalLessons} lessons
             </span>
           </div>
 
           {topic.lessons.length === 0 ? (
-            <div className="rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6">
-              <p className="text-[#fff3da]/70">
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <p className="text-muted">
                 No lessons have been added to this topic yet.
               </p>
             </div>
@@ -195,11 +199,11 @@ export default async function TopicPage({ params }: Props) {
                   <Link
                     key={lesson.id}
                     href={`/topics/${topic.slug}/${lesson.slug}`}
-                    className="group rounded-2xl border border-[#fff3da]/10 bg-[#fff3da]/5 p-6 shadow-lg transition hover:-translate-y-1 hover:bg-[#fff3da]/10"
+                    className="group rounded-2xl border border-border bg-card p-6 shadow-lg transition hover:-translate-y-1 hover:bg-card-hover"
                   >
                     <div className="mb-4 flex items-start justify-between gap-4">
                       <div>
-                        <p className="mb-2 text-xs uppercase tracking-[0.25em] text-[#fff3da]/40">
+                        <p className="mb-2 text-xs uppercase tracking-[0.25em] text-gray-400">
                           Lesson
                         </p>
 
@@ -208,25 +212,25 @@ export default async function TopicPage({ params }: Props) {
                         </h3>
                       </div>
 
-                      <span className="shrink-0 rounded-full bg-[#fff3da]/10 px-3 py-1 text-sm text-[#fff3da]/80">
+                      <span className="shrink-0 rounded-full bg-secondary px-3 py-1 text-sm text-gray-200">
                         {lessonProgress}%
                       </span>
                     </div>
 
                     {lesson.description && (
-                      <p className="mb-5 line-clamp-3 text-sm text-[#fff3da]/60">
+                      <p className="mb-5 line-clamp-3 text-sm text-muted">
                         {lesson.description}
                       </p>
                     )}
 
-                    <p className="mb-3 text-sm text-[#fff3da]/55">
+                    <p className="mb-3 text-sm text-muted">
                       {lessonCompletedParts} / {lessonTotalParts} parts
                       completed
                     </p>
 
-                    <div className="h-3 overflow-hidden rounded-full bg-[#fff3da]/10">
+                    <div className="h-3 overflow-hidden rounded-full bg-secondary">
                       <div
-                        className="h-full rounded-full bg-[#fff3da] transition-all group-hover:bg-white"
+                        className="h-full rounded-full bg-success transition-all"
                         style={{
                           width: `${lessonProgress}%`,
                         }}
@@ -234,11 +238,11 @@ export default async function TopicPage({ params }: Props) {
                     </div>
 
                     <div className="mt-5 flex items-center justify-between">
-                      <span className="text-sm font-medium text-[#fff3da]/75">
+                      <span className="text-sm font-medium text-gray-200">
                         Open lesson
                       </span>
 
-                      <span className="rounded-full bg-[#fff3da]/10 px-3 py-1 text-sm transition group-hover:bg-[#fff3da] group-hover:text-[#041325]">
+                      <span className="rounded-full bg-secondary px-3 py-1 text-sm transition group-hover:bg-primary group-hover:text-primary-foreground">
                         →
                       </span>
                     </div>

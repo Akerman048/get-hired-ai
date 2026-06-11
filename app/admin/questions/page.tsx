@@ -22,15 +22,15 @@ export default async function AdminQuestionsPage() {
     },
   });
 
-const parts = await prisma.lessonPart.findMany({
-  include: {
-    lesson: {
-      include: {
-        topic: true,
+  const parts = await prisma.lessonPart.findMany({
+    include: {
+      lesson: {
+        include: {
+          topic: true,
+        },
       },
     },
-  },
-});
+  });
 
   return (
     <main className="mx-auto max-w-5xl p-8">
@@ -38,15 +38,17 @@ const parts = await prisma.lessonPart.findMany({
 
       <form
         action={createQuestion}
-        className="mb-10 rounded-xl border p-6 shadow-sm"
+        className="mb-10 rounded-2xl border border-border bg-card p-6 shadow-sm"
       >
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Lesson Part</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Lesson Part
+          </label>
 
           <select
             name="lessonPartId"
             required
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
           >
             {parts.map((part) => (
               <option key={part.id} value={part.id}>
@@ -57,46 +59,54 @@ const parts = await prisma.lessonPart.findMany({
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Question title</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Question title
+          </label>
 
           <input
             name="title"
             required
             placeholder="Explain variables"
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition placeholder:text-muted focus:border-primary"
           />
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Prompt</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Prompt
+          </label>
 
           <textarea
             name="prompt"
             required
             rows={6}
             placeholder="Explain what a variable is in your own words."
-            className="w-full rounded-lg border p-3 font-mono"
+            className="w-full rounded-xl border border-border bg-background p-3 font-mono text-foreground outline-none transition placeholder:text-muted focus:border-primary"
           />
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Order</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Order
+          </label>
 
           <input
             name="order"
             type="number"
             defaultValue={0}
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
           />
         </div>
 
         <div className="mb-6">
-          <label className="mb-2 block font-medium">Level</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Level
+          </label>
 
           <select
             name="level"
             required
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
           >
             <option value={Level.JUNIOR}>Junior</option>
             <option value={Level.MIDDLE}>Middle</option>
@@ -106,7 +116,7 @@ const parts = await prisma.lessonPart.findMany({
 
         <button
           type="submit"
-          className="cursor-pointer rounded-lg bg-black px-5 py-3 text-white transition hover:opacity-80"
+          className="cursor-pointer rounded-xl bg-primary px-5 py-3 font-semibold text-primary-foreground transition hover:scale-[1.02]"
         >
           Create Question
         </button>
@@ -119,36 +129,38 @@ const parts = await prisma.lessonPart.findMany({
           {questions.map((question) => (
             <article
               key={question.id}
-              className="rounded-xl border p-5 shadow-sm"
+              className="rounded-2xl border border-border bg-card p-5 shadow-sm"
             >
-              <div className="mb-2 flex items-center justify-between">
+              <div className="mb-2 flex items-center justify-between gap-4">
                 <h3 className="font-semibold">{question.title}</h3>
 
-                <span className="rounded-full bg-gray-800 px-3 py-1 text-sm text-white">
+                <span className="rounded-full bg-secondary px-3 py-1 text-sm text-gray-200">
                   {question.level}
                 </span>
               </div>
 
-              <p className="mb-2 text-sm text-gray-500">
+              <p className="mb-2 text-sm text-muted">
                 {question.lessonPart.lesson.topic.name} /{" "}
                 {question.lessonPart.lesson.title} / {question.lessonPart.title}
               </p>
 
-              <MarkdownContent content={question.prompt} />
+              <div className="rounded-xl border border-border bg-background p-4">
+                <MarkdownContent content={question.prompt} />
+              </div>
 
-              <form action={deleteQuestion} className="mt-4">
+              <form action={deleteQuestion} className="mt-4 flex gap-2">
                 <input type="hidden" name="id" value={question.id} />
 
                 <Link
                   href={`/admin/questions/${question.id}/edit`}
-                  className="mr-2 rounded-lg bg-gray-700 px-4 py-2 text-md text-white transition hover:opacity-80"
+                  className="rounded-xl bg-secondary px-4 py-2 text-sm transition hover:bg-card-hover"
                 >
                   Edit
                 </Link>
 
                 <button
                   type="submit"
-                  className="cursor-pointer rounded-lg bg-red-600 px-2 py-1 text-sm text-white transition hover:opacity-80"
+                  className="cursor-pointer rounded-xl bg-danger px-4 py-2 text-sm font-medium text-gray-100 transition hover:scale-[1.02]"
                 >
                   Delete
                 </button>

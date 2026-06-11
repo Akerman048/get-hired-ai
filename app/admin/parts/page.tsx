@@ -58,15 +58,17 @@ export default async function AdminPartsPage() {
 
       <form
         action={createLessonPart}
-        className="mb-10 rounded-xl border p-6 shadow-sm"
+        className="mb-10 rounded-2xl border border-border bg-card p-6 shadow-sm"
       >
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Lesson</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Lesson
+          </label>
 
           <select
             name="lessonId"
             required
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
           >
             {lessons.map((lesson) => (
               <option key={lesson.id} value={lesson.id}>
@@ -77,42 +79,48 @@ export default async function AdminPartsPage() {
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Part title</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Part title
+          </label>
 
           <input
             name="title"
             required
             placeholder="What are Variables?"
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition placeholder:text-muted focus:border-primary"
           />
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block font-medium">Content</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Content
+          </label>
 
           <textarea
             name="content"
             required
             rows={10}
             placeholder="Markdown content..."
-            className="w-full rounded-lg border p-3 font-mono"
+            className="w-full rounded-xl border border-border bg-background p-3 font-mono text-foreground outline-none transition placeholder:text-muted focus:border-primary"
           />
         </div>
 
         <div className="mb-6">
-          <label className="mb-2 block font-medium">Order</label>
+          <label className="mb-2 block font-medium text-gray-200">
+            Order
+          </label>
 
           <input
             name="order"
             type="number"
             defaultValue={0}
-            className="w-full rounded-lg border p-3"
+            className="w-full rounded-xl border border-border bg-background p-3 text-foreground outline-none transition focus:border-primary"
           />
         </div>
 
         <button
           type="submit"
-          className="rounded-lg bg-black px-5 py-3 text-white transition hover:opacity-80"
+          className="rounded-xl bg-primary px-5 py-3 font-semibold text-primary-foreground transition hover:scale-[1.02]"
         >
           Create Part
         </button>
@@ -125,21 +133,21 @@ export default async function AdminPartsPage() {
           {parts.map((part) => (
             <article
               key={part.id}
-              className="rounded-xl border p-5 shadow-sm"
+              className="rounded-2xl border border-border bg-card p-5 shadow-sm"
             >
               <div className="mb-3 flex items-start justify-between gap-4">
                 <div>
                   <h3 className="font-semibold">{part.title}</h3>
 
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted">
                     {part.lesson.topic.name} / {part.lesson.title}
                   </p>
 
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted">
                     Questions: {part._count.questions}
                   </p>
 
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted">
                     Order: {part.order}
                   </p>
                 </div>
@@ -147,7 +155,7 @@ export default async function AdminPartsPage() {
                 <div className="flex gap-2">
                   <Link
                     href={`/admin/parts/${part.id}/edit`}
-                    className="rounded-lg bg-gray-100 px-4 py-2 text-sm transition hover:bg-gray-200"
+                    className="rounded-xl bg-secondary px-4 py-2 text-sm transition hover:bg-card-hover"
                   >
                     Edit
                   </Link>
@@ -157,7 +165,7 @@ export default async function AdminPartsPage() {
 
                     <button
                       type="submit"
-                      className="rounded-lg bg-red-600 px-4 py-2 text-sm text-white transition hover:opacity-80"
+                      className="rounded-xl bg-danger px-4 py-2 text-sm font-medium text-gray-100 transition hover:scale-[1.02]"
                     >
                       Delete
                     </button>
@@ -165,7 +173,7 @@ export default async function AdminPartsPage() {
                 </div>
               </div>
 
-              <div className="mt-4 text-sm">
+              <div className="mt-4 rounded-xl border border-border bg-background p-4 text-sm">
                 <MarkdownContent content={part.content} />
               </div>
             </article>

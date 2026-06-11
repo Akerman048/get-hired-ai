@@ -25,48 +25,48 @@ export default async function RoadmapPage({ params }: Props) {
     },
   });
 
-const roadmap = await prisma.roadmap.findFirst({
-  where: {
-    id: roadmapId,
-    userId: user.id,
-  },
-  include: {
-    weeks: {
-      orderBy: {
-        weekNumber: "asc",
-      },
-      include: {
-        items: true,
+  const roadmap = await prisma.roadmap.findFirst({
+    where: {
+      id: roadmapId,
+      userId: user.id,
+    },
+    include: {
+      weeks: {
+        orderBy: {
+          weekNumber: "asc",
+        },
+        include: {
+          items: true,
+        },
       },
     },
-  },
-});
+  });
 
   if (!roadmap) {
     notFound();
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100">
+    <main className="min-h-screen bg-background px-4 py-8 text-foreground">
       <div className="mx-auto max-w-5xl">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <Link
             href="/roadmaps"
-            className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
+            className="rounded-xl border border-border px-4 py-2 text-sm text-muted transition hover:bg-card-hover"
           >
             ← Back to roadmaps
           </Link>
 
           <Link
             href="/interview"
-            className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700"
+            className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:scale-[1.02]"
           >
             Start new interview
           </Link>
         </div>
 
-        <section className="mb-8 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg">
-          <div className="mb-4 inline-flex rounded-full bg-green-950 px-3 py-1 text-sm text-green-300">
+        <section className="mb-8 rounded-3xl border border-border bg-card p-6 shadow-lg">
+          <div className="mb-4 inline-flex rounded-full bg-success-light px-3 py-1 text-sm text-gray-100">
             AI Learning Roadmap
           </div>
 
@@ -74,104 +74,119 @@ const roadmap = await prisma.roadmap.findFirst({
             {roadmap.title}
           </h1>
 
-          <p className="max-w-2xl text-slate-400">
+          <p className="max-w-2xl text-muted">
             This roadmap was generated from your weak interview answers. Use it
             as a focused learning plan before your next interview.
           </p>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-              <p className="text-sm text-slate-500">Created</p>
+            <div className="rounded-xl border border-border bg-background p-4">
+              <p className="text-sm text-muted">Created</p>
+
               <p className="mt-1 font-medium">
                 {roadmap.createdAt.toLocaleDateString()}
               </p>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-              <p className="text-sm text-slate-500">Type</p>
+            <div className="rounded-xl border border-border bg-background p-4">
+              <p className="text-sm text-muted">Type</p>
+
               <p className="mt-1 font-medium">Interview improvement</p>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-              <p className="text-sm text-slate-500">Focus</p>
+            <div className="rounded-xl border border-border bg-background p-4">
+              <p className="text-sm text-muted">Focus</p>
+
               <p className="mt-1 font-medium">Weak areas</p>
             </div>
           </div>
         </section>
 
         <section className="space-y-6">
-         {roadmap.weeks.map((week) => {
-  const completed = week.items.filter((item) => item.completed).length;
-  const total = week.items.length;
-  const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+          {roadmap.weeks.map((week) => {
+            const completed = week.items.filter((item) => item.completed).length;
+            const total = week.items.length;
+            const progress =
+              total > 0 ? Math.round((completed / total) * 100) : 0;
 
-  const topics = week.items.filter((item) => item.section === "TOPICS");
-  const practice = week.items.filter((item) => item.section === "PRACTICE");
-  const project = week.items.filter((item) => item.section === "PROJECT");
-  const interview = week.items.filter((item) => item.section === "INTERVIEW");
+            const topics = week.items.filter(
+              (item) => item.section === "TOPICS",
+            );
 
-  return (
-    <section
-      key={week.id}
-      className="mb-6 rounded-2xl border border-slate-800 bg-slate-900 p-6"
-    >
-      <div className="mb-6 flex items-start justify-between gap-4">
-        <div>
-          <p className="mb-2 text-sm text-green-400">
-            Week {week.weekNumber}
-          </p>
+            const practice = week.items.filter(
+              (item) => item.section === "PRACTICE",
+            );
 
-          <h2 className="text-2xl font-bold text-white">
-            {week.title}
-          </h2>
+            const project = week.items.filter(
+              (item) => item.section === "PROJECT",
+            );
 
-          <p className="mt-2 text-sm text-slate-400">
-            {week.description}
-          </p>
-        </div>
+            const interview = week.items.filter(
+              (item) => item.section === "INTERVIEW",
+            );
 
-        <div className="min-w-40">
-          <p className="mb-2 text-sm text-slate-400">
-            {completed} / {total} completed
-          </p>
+            return (
+              <section
+                key={week.id}
+                className="mb-6 rounded-3xl border border-border bg-card p-6"
+              >
+                <div className="mb-6 flex items-start justify-between gap-4">
+                  <div>
+                    <p className="mb-2 text-sm text-success">
+                      Week {week.weekNumber}
+                    </p>
 
-          <div className="h-2 rounded-full bg-slate-800">
-            <div
-              className="h-2 rounded-full bg-green-500"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        </div>
-      </div>
+                    <h2 className="text-2xl font-bold">{week.title}</h2>
 
-      <div className="grid gap-6 md:grid-cols-4">
-        <RoadmapColumn
-          title="Topics to review"
-          items={topics}
-          roadmapId={roadmap.id}
-        />
+                    <p className="mt-2 text-sm text-muted">
+                      {week.description}
+                    </p>
+                  </div>
 
-        <RoadmapColumn
-          title="Practice tasks"
-          items={practice}
-          roadmapId={roadmap.id}
-        />
+                  <div className="min-w-40">
+                    <p className="mb-2 text-sm text-muted">
+                      {completed} / {total} completed
+                    </p>
 
-        <RoadmapColumn
-          title="Mini project"
-          items={project}
-          roadmapId={roadmap.id}
-        />
+                    <div className="h-2 rounded-full bg-secondary">
+                      <div
+                        className="h-2 rounded-full bg-success"
+                        style={{
+                          width: `${progress}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
 
-        <RoadmapColumn
-          title="Before next interview"
-          items={interview}
-          roadmapId={roadmap.id}
-        />
-      </div>
-    </section>
-  );
-})}
+                <div className="grid gap-6 md:grid-cols-4">
+                  <RoadmapColumn
+                    title="Topics to review"
+                    items={topics}
+                    roadmapId={roadmap.id}
+                  />
+
+                  <RoadmapColumn
+                    title="Practice tasks"
+                    items={practice}
+                    roadmapId={roadmap.id}
+                  />
+
+                  <RoadmapColumn
+                    title="Mini project"
+                    items={project}
+                    roadmapId={roadmap.id}
+                  />
+
+                  <RoadmapColumn
+                    title="Before next interview"
+                    items={interview}
+                    roadmapId={roadmap.id}
+                  />
+                </div>
+              </section>
+            );
+          })}
         </section>
       </div>
     </main>

@@ -86,186 +86,202 @@ export default async function InterviewResultPage({ params }: Props) {
   );
 
   return (
-    <main className="mx-auto max-w-4xl p-8">
-     <AutoEvaluateAnswers
-  sessionId={interview.id}
-  hasPendingAnswers={pendingAnswers.length > 0}
-/>
-      <h1 className="mb-4 text-4xl font-bold">Interview Result</h1>
+    <main className="min-h-screen bg-background px-4 py-8 text-foreground">
+      <div className="mx-auto max-w-4xl">
+        <AutoEvaluateAnswers
+          sessionId={interview.id}
+          hasPendingAnswers={pendingAnswers.length > 0}
+        />
 
-      <p className="mb-8 text-xl text-gray-500">
-        Average score: {averageScore}/10
-      </p>
+        <section className="mb-8 rounded-3xl border border-border bg-card p-8 shadow-2xl">
+          <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-muted">
+            Interview summary
+          </p>
 
-      {pendingAnswers.length > 0 && (
-        <div className="mb-8 rounded-xl border border-yellow-700 bg-yellow-950 p-4 text-yellow-200">
-          AI is still evaluating {pendingAnswers.length} answer(s). Refresh this
-          page in a few seconds.
-        </div>
-      )}
+          <h1 className="mb-4 text-4xl font-bold">Interview Result</h1>
 
-      {failedAnswers.length > 0 && (
-        <div className="mb-8 rounded-xl border border-red-700 bg-red-950 p-4 text-red-200">
-          {failedAnswers.length} answer(s) failed to evaluate. You can run the
-          evaluation job again.
-        </div>
-      )}
+          <p className="text-xl text-muted">
+            Average score:{" "}
+            <span className="font-bold text-foreground">{averageScore}/10</span>
+          </p>
+        </section>
 
-{pendingAnswers.length === 0 && completedAnswers.length > 0 && (
-  <form action={generateRoadmap} className="mb-8">
-    <input type="hidden" name="sessionId" value={interview.id} />
+        {pendingAnswers.length > 0 && (
+          <div className="mb-8 rounded-2xl border border-warning bg-warning-light p-4 text-gray-100">
+            AI is still evaluating {pendingAnswers.length} answer(s). Refresh
+            this page in a few seconds.
+          </div>
+        )}
 
-    <button
-      type="submit"
-      className="rounded-lg bg-green-700 px-5 py-3 text-white transition hover:bg-green-800"
-    >
-      Generate roadmap
-    </button>
-  </form>
-)}
+        {failedAnswers.length > 0 && (
+          <div className="mb-8 rounded-2xl border border-danger bg-danger-light p-4 text-gray-100">
+            {failedAnswers.length} answer(s) failed to evaluate. You can run the
+            evaluation job again.
+          </div>
+        )}
 
-      <section className="mb-10">
-        <h2 className="mb-4 text-2xl font-semibold">Answers</h2>
+        {pendingAnswers.length === 0 && completedAnswers.length > 0 && (
+          <form action={generateRoadmap} className="mb-8">
+            <input type="hidden" name="sessionId" value={interview.id} />
 
-        <div className="space-y-4">
-          {interview.answers.map((answer) => {
-            const question = answer.question;
-            const part = question.lessonPart;
-            const lesson = part.lesson;
-            const topic = lesson.topic;
+            <button
+              type="submit"
+              className="rounded-xl bg-success px-5 py-3 font-semibold text-gray-100 transition hover:scale-[1.02]"
+            >
+              Generate roadmap
+            </button>
+          </form>
+        )}
 
-            return (
-              <article
-                key={answer.id}
-                className="rounded-xl border p-5 shadow-sm"
-              >
-                <div className="mb-3 flex items-center justify-between gap-4">
-                  <div>
-                    <h3 className="font-semibold">{question.title}</h3>
+        <section className="mb-10">
+          <h2 className="mb-4 text-2xl font-semibold">Answers</h2>
 
-                    <p className="mt-1 text-sm text-gray-500">
-                      {topic.name} / {lesson.title} / {part.title}
-                    </p>
-                  </div>
-
-                  <span className="shrink-0 rounded-full bg-slate-800 px-3 py-1 text-sm text-white">
-                    {answer.evaluationStatus === "COMPLETED"
-                      ? `${answer.aiScore ?? 0}/10`
-                      : answer.evaluationStatus === "FAILED"
-                        ? "Failed"
-                        : "Evaluating..."}
-                  </span>
-                </div>
-
-                {answer.evaluationStatus === "COMPLETED" && (
-                  <div className="grid gap-2 sm:grid-cols-4">
-                    <p className="rounded-lg bg-slate-800 p-2 text-sm text-white">
-                      Accuracy: {answer.technicalAccuracy ?? 0}/10
-                    </p>
-
-                    <p className="rounded-lg bg-slate-800 p-2 text-sm text-white">
-                      Clarity: {answer.clarity ?? 0}/10
-                    </p>
-
-                    <p className="rounded-lg bg-slate-800 p-2 text-sm text-white">
-                      Complete: {answer.completeness ?? 0}/10
-                    </p>
-
-                    <p className="rounded-lg bg-slate-800 p-2 text-sm text-white">
-                      Style: {answer.interviewStyle ?? 0}/10
-                    </p>
-                  </div>
-                )}
-                {answer.timeSpentSeconds !== null && (
-                  <p className="mt-3 text-sm text-gray-500">
-                    Time spent: {answer.timeSpentSeconds}s
-                  </p>
-                )}
-
-                <details className="mt-4 rounded-xl border p-4">
-                  <summary className="cursor-pointer font-medium">
-                    View detailed feedback
-                  </summary>
-
-                  <div className="mt-4 space-y-4">
-                    {answer.aiFeedback && (
-                      <div>
-                        <h4 className="mb-1 font-semibold">Feedback</h4>
-                        <p className="text-sm text-gray-600">
-                          {answer.aiFeedback}
-                        </p>
-                      </div>
-                    )}
-
-                    {answer.improvedAnswer && (
-                      <div className="rounded-lg bg-green-950 p-4">
-                        <h4 className="mb-2 font-semibold text-white">
-                          Improved answer
-                        </h4>
-                        <p className="text-sm text-white">
-                          {answer.improvedAnswer}
-                        </p>
-                      </div>
-                    )}
-
-                    {answer.missingConcepts && (
-                      <div className="rounded-lg bg-red-900 p-4">
-                        <h4 className="mb-2 font-semibold text-white">
-                          Missing concepts
-                        </h4>
-                        <p className="text-sm text-white">
-                          {answer.missingConcepts}
-                        </p>
-                      </div>
-                    )}
-
-                    <Link
-                      href={`/topics/${topic.slug}/${lesson.slug}/${part.id}`}
-                      className="inline-block rounded-lg bg-black px-4 py-2 text-sm text-white"
-                    >
-                      Review lesson
-                    </Link>
-                  </div>
-                </details>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section>
-        <h2 className="mb-4 text-2xl font-semibold">Weak Areas</h2>
-
-        {weakAnswers.length === 0 ? (
-          <p className="text-gray-500">No weak areas. Good job 🎉</p>
-        ) : (
           <div className="space-y-4">
-            {weakAnswers.map((answer) => {
-              const part = answer.question.lessonPart;
+            {interview.answers.map((answer) => {
+              const question = answer.question;
+              const part = question.lessonPart;
               const lesson = part.lesson;
               const topic = lesson.topic;
 
               return (
-                <Link
+                <article
                   key={answer.id}
-                  href={`/topics/${topic.slug}/${lesson.slug}/${part.id}`}
-                  className="block rounded-xl border p-5 transition hover:bg-slate-700"
+                  className="rounded-2xl border border-border bg-card p-5 shadow-sm"
                 >
-                  <p className="text-sm text-gray-500">
-                    {topic.name} / {lesson.title}
-                  </p>
+                  <div className="mb-3 flex items-center justify-between gap-4">
+                    <div>
+                      <h3 className="font-semibold">{question.title}</h3>
 
-                  <h3 className="text-lg font-semibold">{part.title}</h3>
+                      <p className="mt-1 text-sm text-muted">
+                        {topic.name} / {lesson.title} / {part.title}
+                      </p>
+                    </div>
 
-                  <p className="text-sm text-red-500">
-                    Score: {answer.aiScore}/10
-                  </p>
-                </Link>
+                    <span className="shrink-0 rounded-full bg-secondary px-3 py-1 text-sm text-gray-100">
+                      {answer.evaluationStatus === "COMPLETED"
+                        ? `${answer.aiScore ?? 0}/10`
+                        : answer.evaluationStatus === "FAILED"
+                          ? "Failed"
+                          : "Evaluating..."}
+                    </span>
+                  </div>
+
+                  {answer.evaluationStatus === "COMPLETED" && (
+                    <div className="grid gap-2 sm:grid-cols-4">
+                      <p className="rounded-xl bg-secondary p-2 text-sm text-gray-100">
+                        Accuracy: {answer.technicalAccuracy ?? 0}/10
+                      </p>
+
+                      <p className="rounded-xl bg-secondary p-2 text-sm text-gray-100">
+                        Clarity: {answer.clarity ?? 0}/10
+                      </p>
+
+                      <p className="rounded-xl bg-secondary p-2 text-sm text-gray-100">
+                        Complete: {answer.completeness ?? 0}/10
+                      </p>
+
+                      <p className="rounded-xl bg-secondary p-2 text-sm text-gray-100">
+                        Style: {answer.interviewStyle ?? 0}/10
+                      </p>
+                    </div>
+                  )}
+
+                  {answer.timeSpentSeconds !== null && (
+                    <p className="mt-3 text-sm text-muted">
+                      Time spent: {answer.timeSpentSeconds}s
+                    </p>
+                  )}
+
+                  <details className="mt-4 rounded-2xl border border-border bg-background p-4">
+                    <summary className="cursor-pointer font-medium">
+                      View detailed feedback
+                    </summary>
+
+                    <div className="mt-4 space-y-4">
+                      {answer.aiFeedback && (
+                        <div>
+                          <h4 className="mb-1 font-semibold">Feedback</h4>
+
+                          <p className="text-sm text-muted">
+                            {answer.aiFeedback}
+                          </p>
+                        </div>
+                      )}
+
+                      {answer.improvedAnswer && (
+                        <div className="rounded-xl bg-success-light p-4">
+                          <h4 className="mb-2 font-semibold text-gray-100">
+                            Improved answer
+                          </h4>
+
+                          <p className="text-sm text-gray-100">
+                            {answer.improvedAnswer}
+                          </p>
+                        </div>
+                      )}
+
+                      {answer.missingConcepts && (
+                        <div className="rounded-xl bg-danger-light p-4">
+                          <h4 className="mb-2 font-semibold text-gray-100">
+                            Missing concepts
+                          </h4>
+
+                          <p className="text-sm text-gray-100">
+                            {answer.missingConcepts}
+                          </p>
+                        </div>
+                      )}
+
+                      <Link
+                        href={`/topics/${topic.slug}/${lesson.slug}/${part.id}`}
+                        className="inline-block rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:scale-[1.02]"
+                      >
+                        Review lesson
+                      </Link>
+                    </div>
+                  </details>
+                </article>
               );
             })}
           </div>
-        )}
-      </section>
+        </section>
+
+        <section>
+          <h2 className="mb-4 text-2xl font-semibold">Weak Areas</h2>
+
+          {weakAnswers.length === 0 ? (
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <p className="text-muted">No weak areas. Good job 🎉</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {weakAnswers.map((answer) => {
+                const part = answer.question.lessonPart;
+                const lesson = part.lesson;
+                const topic = lesson.topic;
+
+                return (
+                  <Link
+                    key={answer.id}
+                    href={`/topics/${topic.slug}/${lesson.slug}/${part.id}`}
+                    className="block rounded-2xl border border-border bg-card p-5 transition hover:bg-card-hover"
+                  >
+                    <p className="text-sm text-muted">
+                      {topic.name} / {lesson.title}
+                    </p>
+
+                    <h3 className="text-lg font-semibold">{part.title}</h3>
+
+                    <p className="text-sm text-danger">
+                      Score: {answer.aiScore}/10
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </section>
+      </div>
     </main>
   );
 }
