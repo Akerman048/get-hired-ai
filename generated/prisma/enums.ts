@@ -43,3 +43,13 @@ export const InterviewMode = {
 } as const
 
 export type InterviewMode = (typeof InterviewMode)[keyof typeof InterviewMode]
+
+
+export const EvaluationStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+} as const
+
+export type EvaluationStatus = (typeof EvaluationStatus)[keyof typeof EvaluationStatus]

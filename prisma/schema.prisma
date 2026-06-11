@@ -188,6 +188,8 @@ model InterviewAnswer {
   aiScore    Int?
   aiFeedback String?
 
+  evaluationStatus EvaluationStatus @default(PENDING)
+
   technicalAccuracy Int?
   clarity           Int?
   completeness      Int?
@@ -271,6 +273,13 @@ enum InterviewMode {
   PRACTICE
   REAL
   HARD
+}
+
+enum EvaluationStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
 }
 
 

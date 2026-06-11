@@ -51,6 +51,7 @@ export type InterviewAnswerMinAggregateOutputType = {
   answerText: string | null
   aiScore: number | null
   aiFeedback: string | null
+  evaluationStatus: $Enums.EvaluationStatus | null
   technicalAccuracy: number | null
   clarity: number | null
   completeness: number | null
@@ -69,6 +70,7 @@ export type InterviewAnswerMaxAggregateOutputType = {
   answerText: string | null
   aiScore: number | null
   aiFeedback: string | null
+  evaluationStatus: $Enums.EvaluationStatus | null
   technicalAccuracy: number | null
   clarity: number | null
   completeness: number | null
@@ -87,6 +89,7 @@ export type InterviewAnswerCountAggregateOutputType = {
   answerText: number
   aiScore: number
   aiFeedback: number
+  evaluationStatus: number
   technicalAccuracy: number
   clarity: number
   completeness: number
@@ -125,6 +128,7 @@ export type InterviewAnswerMinAggregateInputType = {
   answerText?: true
   aiScore?: true
   aiFeedback?: true
+  evaluationStatus?: true
   technicalAccuracy?: true
   clarity?: true
   completeness?: true
@@ -143,6 +147,7 @@ export type InterviewAnswerMaxAggregateInputType = {
   answerText?: true
   aiScore?: true
   aiFeedback?: true
+  evaluationStatus?: true
   technicalAccuracy?: true
   clarity?: true
   completeness?: true
@@ -161,6 +166,7 @@ export type InterviewAnswerCountAggregateInputType = {
   answerText?: true
   aiScore?: true
   aiFeedback?: true
+  evaluationStatus?: true
   technicalAccuracy?: true
   clarity?: true
   completeness?: true
@@ -266,6 +272,7 @@ export type InterviewAnswerGroupByOutputType = {
   answerText: string | null
   aiScore: number | null
   aiFeedback: string | null
+  evaluationStatus: $Enums.EvaluationStatus
   technicalAccuracy: number | null
   clarity: number | null
   completeness: number | null
@@ -307,6 +314,7 @@ export type InterviewAnswerWhereInput = {
   answerText?: Prisma.StringNullableFilter<"InterviewAnswer"> | string | null
   aiScore?: Prisma.IntNullableFilter<"InterviewAnswer"> | number | null
   aiFeedback?: Prisma.StringNullableFilter<"InterviewAnswer"> | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFilter<"InterviewAnswer"> | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.IntNullableFilter<"InterviewAnswer"> | number | null
   clarity?: Prisma.IntNullableFilter<"InterviewAnswer"> | number | null
   completeness?: Prisma.IntNullableFilter<"InterviewAnswer"> | number | null
@@ -327,6 +335,7 @@ export type InterviewAnswerOrderByWithRelationInput = {
   answerText?: Prisma.SortOrderInput | Prisma.SortOrder
   aiScore?: Prisma.SortOrderInput | Prisma.SortOrder
   aiFeedback?: Prisma.SortOrderInput | Prisma.SortOrder
+  evaluationStatus?: Prisma.SortOrder
   technicalAccuracy?: Prisma.SortOrderInput | Prisma.SortOrder
   clarity?: Prisma.SortOrderInput | Prisma.SortOrder
   completeness?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -350,6 +359,7 @@ export type InterviewAnswerWhereUniqueInput = Prisma.AtLeast<{
   answerText?: Prisma.StringNullableFilter<"InterviewAnswer"> | string | null
   aiScore?: Prisma.IntNullableFilter<"InterviewAnswer"> | number | null
   aiFeedback?: Prisma.StringNullableFilter<"InterviewAnswer"> | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFilter<"InterviewAnswer"> | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.IntNullableFilter<"InterviewAnswer"> | number | null
   clarity?: Prisma.IntNullableFilter<"InterviewAnswer"> | number | null
   completeness?: Prisma.IntNullableFilter<"InterviewAnswer"> | number | null
@@ -370,6 +380,7 @@ export type InterviewAnswerOrderByWithAggregationInput = {
   answerText?: Prisma.SortOrderInput | Prisma.SortOrder
   aiScore?: Prisma.SortOrderInput | Prisma.SortOrder
   aiFeedback?: Prisma.SortOrderInput | Prisma.SortOrder
+  evaluationStatus?: Prisma.SortOrder
   technicalAccuracy?: Prisma.SortOrderInput | Prisma.SortOrder
   clarity?: Prisma.SortOrderInput | Prisma.SortOrder
   completeness?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -396,6 +407,7 @@ export type InterviewAnswerScalarWhereWithAggregatesInput = {
   answerText?: Prisma.StringNullableWithAggregatesFilter<"InterviewAnswer"> | string | null
   aiScore?: Prisma.IntNullableWithAggregatesFilter<"InterviewAnswer"> | number | null
   aiFeedback?: Prisma.StringNullableWithAggregatesFilter<"InterviewAnswer"> | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusWithAggregatesFilter<"InterviewAnswer"> | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.IntNullableWithAggregatesFilter<"InterviewAnswer"> | number | null
   clarity?: Prisma.IntNullableWithAggregatesFilter<"InterviewAnswer"> | number | null
   completeness?: Prisma.IntNullableWithAggregatesFilter<"InterviewAnswer"> | number | null
@@ -412,6 +424,7 @@ export type InterviewAnswerCreateInput = {
   answerText?: string | null
   aiScore?: number | null
   aiFeedback?: string | null
+  evaluationStatus?: $Enums.EvaluationStatus
   technicalAccuracy?: number | null
   clarity?: number | null
   completeness?: number | null
@@ -432,6 +445,7 @@ export type InterviewAnswerUncheckedCreateInput = {
   answerText?: string | null
   aiScore?: number | null
   aiFeedback?: string | null
+  evaluationStatus?: $Enums.EvaluationStatus
   technicalAccuracy?: number | null
   clarity?: number | null
   completeness?: number | null
@@ -448,6 +462,7 @@ export type InterviewAnswerUpdateInput = {
   answerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aiScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   clarity?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completeness?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -468,6 +483,7 @@ export type InterviewAnswerUncheckedUpdateInput = {
   answerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aiScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   clarity?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completeness?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -486,6 +502,7 @@ export type InterviewAnswerCreateManyInput = {
   answerText?: string | null
   aiScore?: number | null
   aiFeedback?: string | null
+  evaluationStatus?: $Enums.EvaluationStatus
   technicalAccuracy?: number | null
   clarity?: number | null
   completeness?: number | null
@@ -502,6 +519,7 @@ export type InterviewAnswerUpdateManyMutationInput = {
   answerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aiScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   clarity?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completeness?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -520,6 +538,7 @@ export type InterviewAnswerUncheckedUpdateManyInput = {
   answerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aiScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   clarity?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completeness?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -548,6 +567,7 @@ export type InterviewAnswerCountOrderByAggregateInput = {
   answerText?: Prisma.SortOrder
   aiScore?: Prisma.SortOrder
   aiFeedback?: Prisma.SortOrder
+  evaluationStatus?: Prisma.SortOrder
   technicalAccuracy?: Prisma.SortOrder
   clarity?: Prisma.SortOrder
   completeness?: Prisma.SortOrder
@@ -575,6 +595,7 @@ export type InterviewAnswerMaxOrderByAggregateInput = {
   answerText?: Prisma.SortOrder
   aiScore?: Prisma.SortOrder
   aiFeedback?: Prisma.SortOrder
+  evaluationStatus?: Prisma.SortOrder
   technicalAccuracy?: Prisma.SortOrder
   clarity?: Prisma.SortOrder
   completeness?: Prisma.SortOrder
@@ -593,6 +614,7 @@ export type InterviewAnswerMinOrderByAggregateInput = {
   answerText?: Prisma.SortOrder
   aiScore?: Prisma.SortOrder
   aiFeedback?: Prisma.SortOrder
+  evaluationStatus?: Prisma.SortOrder
   technicalAccuracy?: Prisma.SortOrder
   clarity?: Prisma.SortOrder
   completeness?: Prisma.SortOrder
@@ -697,11 +719,16 @@ export type InterviewAnswerUncheckedUpdateManyWithoutSessionNestedInput = {
   deleteMany?: Prisma.InterviewAnswerScalarWhereInput | Prisma.InterviewAnswerScalarWhereInput[]
 }
 
+export type EnumEvaluationStatusFieldUpdateOperationsInput = {
+  set?: $Enums.EvaluationStatus
+}
+
 export type InterviewAnswerCreateWithoutQuestionInput = {
   id?: string
   answerText?: string | null
   aiScore?: number | null
   aiFeedback?: string | null
+  evaluationStatus?: $Enums.EvaluationStatus
   technicalAccuracy?: number | null
   clarity?: number | null
   completeness?: number | null
@@ -720,6 +747,7 @@ export type InterviewAnswerUncheckedCreateWithoutQuestionInput = {
   answerText?: string | null
   aiScore?: number | null
   aiFeedback?: string | null
+  evaluationStatus?: $Enums.EvaluationStatus
   technicalAccuracy?: number | null
   clarity?: number | null
   completeness?: number | null
@@ -767,6 +795,7 @@ export type InterviewAnswerScalarWhereInput = {
   answerText?: Prisma.StringNullableFilter<"InterviewAnswer"> | string | null
   aiScore?: Prisma.IntNullableFilter<"InterviewAnswer"> | number | null
   aiFeedback?: Prisma.StringNullableFilter<"InterviewAnswer"> | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFilter<"InterviewAnswer"> | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.IntNullableFilter<"InterviewAnswer"> | number | null
   clarity?: Prisma.IntNullableFilter<"InterviewAnswer"> | number | null
   completeness?: Prisma.IntNullableFilter<"InterviewAnswer"> | number | null
@@ -783,6 +812,7 @@ export type InterviewAnswerCreateWithoutSessionInput = {
   answerText?: string | null
   aiScore?: number | null
   aiFeedback?: string | null
+  evaluationStatus?: $Enums.EvaluationStatus
   technicalAccuracy?: number | null
   clarity?: number | null
   completeness?: number | null
@@ -801,6 +831,7 @@ export type InterviewAnswerUncheckedCreateWithoutSessionInput = {
   answerText?: string | null
   aiScore?: number | null
   aiFeedback?: string | null
+  evaluationStatus?: $Enums.EvaluationStatus
   technicalAccuracy?: number | null
   clarity?: number | null
   completeness?: number | null
@@ -844,6 +875,7 @@ export type InterviewAnswerCreateManyQuestionInput = {
   answerText?: string | null
   aiScore?: number | null
   aiFeedback?: string | null
+  evaluationStatus?: $Enums.EvaluationStatus
   technicalAccuracy?: number | null
   clarity?: number | null
   completeness?: number | null
@@ -860,6 +892,7 @@ export type InterviewAnswerUpdateWithoutQuestionInput = {
   answerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aiScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   clarity?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completeness?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -878,6 +911,7 @@ export type InterviewAnswerUncheckedUpdateWithoutQuestionInput = {
   answerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aiScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   clarity?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completeness?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -895,6 +929,7 @@ export type InterviewAnswerUncheckedUpdateManyWithoutQuestionInput = {
   answerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aiScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   clarity?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completeness?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -912,6 +947,7 @@ export type InterviewAnswerCreateManySessionInput = {
   answerText?: string | null
   aiScore?: number | null
   aiFeedback?: string | null
+  evaluationStatus?: $Enums.EvaluationStatus
   technicalAccuracy?: number | null
   clarity?: number | null
   completeness?: number | null
@@ -928,6 +964,7 @@ export type InterviewAnswerUpdateWithoutSessionInput = {
   answerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aiScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   clarity?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completeness?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -946,6 +983,7 @@ export type InterviewAnswerUncheckedUpdateWithoutSessionInput = {
   answerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aiScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   clarity?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completeness?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -963,6 +1001,7 @@ export type InterviewAnswerUncheckedUpdateManyWithoutSessionInput = {
   answerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aiScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   aiFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evaluationStatus?: Prisma.EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
   technicalAccuracy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   clarity?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completeness?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -983,6 +1022,7 @@ export type InterviewAnswerSelect<ExtArgs extends runtime.Types.Extensions.Inter
   answerText?: boolean
   aiScore?: boolean
   aiFeedback?: boolean
+  evaluationStatus?: boolean
   technicalAccuracy?: boolean
   clarity?: boolean
   completeness?: boolean
@@ -1003,6 +1043,7 @@ export type InterviewAnswerSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   answerText?: boolean
   aiScore?: boolean
   aiFeedback?: boolean
+  evaluationStatus?: boolean
   technicalAccuracy?: boolean
   clarity?: boolean
   completeness?: boolean
@@ -1023,6 +1064,7 @@ export type InterviewAnswerSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   answerText?: boolean
   aiScore?: boolean
   aiFeedback?: boolean
+  evaluationStatus?: boolean
   technicalAccuracy?: boolean
   clarity?: boolean
   completeness?: boolean
@@ -1043,6 +1085,7 @@ export type InterviewAnswerSelectScalar = {
   answerText?: boolean
   aiScore?: boolean
   aiFeedback?: boolean
+  evaluationStatus?: boolean
   technicalAccuracy?: boolean
   clarity?: boolean
   completeness?: boolean
@@ -1054,7 +1097,7 @@ export type InterviewAnswerSelectScalar = {
   updatedAt?: boolean
 }
 
-export type InterviewAnswerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sessionId" | "questionId" | "answerText" | "aiScore" | "aiFeedback" | "technicalAccuracy" | "clarity" | "completeness" | "interviewStyle" | "improvedAnswer" | "missingConcepts" | "timeSpentSeconds" | "createdAt" | "updatedAt", ExtArgs["result"]["interviewAnswer"]>
+export type InterviewAnswerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sessionId" | "questionId" | "answerText" | "aiScore" | "aiFeedback" | "evaluationStatus" | "technicalAccuracy" | "clarity" | "completeness" | "interviewStyle" | "improvedAnswer" | "missingConcepts" | "timeSpentSeconds" | "createdAt" | "updatedAt", ExtArgs["result"]["interviewAnswer"]>
 export type InterviewAnswerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   session?: boolean | Prisma.InterviewSessionDefaultArgs<ExtArgs>
   question?: boolean | Prisma.QuestionDefaultArgs<ExtArgs>
@@ -1081,6 +1124,7 @@ export type $InterviewAnswerPayload<ExtArgs extends runtime.Types.Extensions.Int
     answerText: string | null
     aiScore: number | null
     aiFeedback: string | null
+    evaluationStatus: $Enums.EvaluationStatus
     technicalAccuracy: number | null
     clarity: number | null
     completeness: number | null
@@ -1521,6 +1565,7 @@ export interface InterviewAnswerFieldRefs {
   readonly answerText: Prisma.FieldRef<"InterviewAnswer", 'String'>
   readonly aiScore: Prisma.FieldRef<"InterviewAnswer", 'Int'>
   readonly aiFeedback: Prisma.FieldRef<"InterviewAnswer", 'String'>
+  readonly evaluationStatus: Prisma.FieldRef<"InterviewAnswer", 'EvaluationStatus'>
   readonly technicalAccuracy: Prisma.FieldRef<"InterviewAnswer", 'Int'>
   readonly clarity: Prisma.FieldRef<"InterviewAnswer", 'Int'>
   readonly completeness: Prisma.FieldRef<"InterviewAnswer", 'Int'>

@@ -60,12 +60,17 @@ export default async function InterviewSessionPage({ params }: Props) {
     notFound();
   }
 
-  const currentAnswer =
-    interview.answers.find((answer) => !answer.answerText) ?? null;
+  const currentIndex = interview.answers.findIndex(
+  (answer) => !answer.answerText?.trim(),
+);
 
-  const answeredCount = interview.answers.filter(
-    (answer) => answer.answerText,
-  ).length;
+
+const currentAnswer =
+  currentIndex === -1 ? null : interview.answers[currentIndex];
+
+const answeredCount = interview.answers.filter(
+  (answer) => answer.answerText?.trim(),
+).length;
 
   const progress = Math.round((answeredCount / interview.answers.length) * 100);
 
@@ -85,9 +90,7 @@ export default async function InterviewSessionPage({ params }: Props) {
     );
   }
 
-  const currentIndex = interview.answers.findIndex(
-    (answer) => answer.id === currentAnswer.id,
-  );
+
 
   const question = currentAnswer.question;
   const topic = question.lessonPart.lesson.topic;
@@ -106,7 +109,7 @@ export default async function InterviewSessionPage({ params }: Props) {
       <div className="mb-8 rounded-xl border p-5">
         <div className="mb-2 flex items-center justify-between">
           <p className="font-semibold">
-            Question {currentIndex + 1} / {interview.answers.length}
+            Question {answeredCount + 1} / {interview.answers.length}
           </p>
 
           <p className="font-semibold">{progress}%</p>

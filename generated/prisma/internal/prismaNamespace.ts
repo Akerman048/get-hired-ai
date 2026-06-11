@@ -1718,6 +1718,7 @@ export const InterviewAnswerScalarFieldEnum = {
   answerText: 'answerText',
   aiScore: 'aiScore',
   aiFeedback: 'aiFeedback',
+  evaluationStatus: 'evaluationStatus',
   technicalAccuracy: 'technicalAccuracy',
   clarity: 'clarity',
   completeness: 'completeness',
@@ -1890,6 +1891,20 @@ export type EnumInterviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'InterviewStatus[]'
  */
 export type ListEnumInterviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InterviewStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EvaluationStatus'
+ */
+export type EnumEvaluationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EvaluationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'EvaluationStatus[]'
+ */
+export type ListEnumEvaluationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EvaluationStatus[]'>
     
 
 

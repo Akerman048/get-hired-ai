@@ -235,6 +235,7 @@ export const InterviewAnswerScalarFieldEnum = {
   answerText: 'answerText',
   aiScore: 'aiScore',
   aiFeedback: 'aiFeedback',
+  evaluationStatus: 'evaluationStatus',
   technicalAccuracy: 'technicalAccuracy',
   clarity: 'clarity',
   completeness: 'completeness',

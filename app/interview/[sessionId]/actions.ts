@@ -2,7 +2,6 @@
 
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { openai } from "@/lib/openai";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -31,63 +30,7 @@ export async function submitInterviewAnswer(formData: FormData) {
         userId: user.id,
       },
     },
-    include: {
-      question: true,
-    },
   });
-
-  const aiResponse = await openai.chat.completions.create({
-    model: "gpt-4.1-mini",
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are a strict but helpful technical interviewer. Return raw JSON only. Do not use markdown. Do not wrap the response in ```json or ```.",
-      },
-      {
-        role: "user",
-content: `
-Question:
-${interviewAnswer.question.prompt}
-
-User answer:
-${answerText}
-
-Time spent: ${timeSpentSeconds} seconds
-
-Return only JSON:
-{
-  "score": number,
-  "technicalAccuracy": number,
-  "clarity": number,
-  "completeness": number,
-  "interviewStyle": number,
-  "feedback": string,
-  "improvedAnswer": string,
-  "missingConcepts": string[]
-}
-`,
-      },
-    ],
-  });
-
-const raw = aiResponse.choices[0]?.message?.content ?? "{}";
-
-const cleaned = raw
-  .replace(/```json/g, "")
-  .replace(/```/g, "")
-  .trim();
-
-const result = JSON.parse(cleaned) as {
-  score: number;
-  technicalAccuracy: number;
-  clarity: number;
-  completeness: number;
-  interviewStyle: number;
-  feedback: string;
-  improvedAnswer: string;
-  missingConcepts: string[];
-};
 
 await prisma.interviewAnswer.update({
   where: {
@@ -95,20 +38,15 @@ await prisma.interviewAnswer.update({
   },
   data: {
     answerText,
-    aiScore: result.score,
-    aiFeedback: result.feedback,
-    technicalAccuracy: result.technicalAccuracy,
-    clarity: result.clarity,
-    completeness: result.completeness,
-    interviewStyle: result.interviewStyle,
-    improvedAnswer: result.improvedAnswer,
-    missingConcepts: result.missingConcepts.join(", "),
     timeSpentSeconds,
+    evaluationStatus: "PENDING",
   },
 });
 
-  revalidatePath(`/interview/${sessionId}`);
+revalidatePath(`/interview/${sessionId}`);
+redirect(`/interview/${sessionId}`);
 }
+
 export async function finishInterview(formData: FormData) {
   const session = await auth();
 
@@ -125,20 +63,20 @@ export async function finishInterview(formData: FormData) {
   });
 
   const interview = await prisma.interviewSession.findFirstOrThrow({
-  where: {
-    id: sessionId,
-    userId: user.id,
-  },
-});
+    where: {
+      id: sessionId,
+      userId: user.id,
+    },
+  });
 
-await prisma.interviewSession.update({
-  where: {
-    id: interview.id,
-  },
-  data: {
-    status: "COMPLETED",
-  },
-});
+  await prisma.interviewSession.update({
+    where: {
+      id: interview.id,
+    },
+    data: {
+      status: "COMPLETED",
+    },
+  });
 
   redirect(`/interview/${sessionId}/result`);
 }

@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { generateRoadmap } from "./actions";
+import AutoEvaluateAnswers from "@/components/interview/AutoEvaluateAnswers";
 
 type Props = {
   params: Promise<{
@@ -55,6 +56,20 @@ export default async function InterviewResultPage({ params }: Props) {
     notFound();
   }
 
+  const pendingAnswers = interview.answers.filter(
+    (answer) =>
+      answer.evaluationStatus === "PENDING" ||
+      answer.evaluationStatus === "PROCESSING",
+  );
+
+  const completedAnswers = interview.answers.filter(
+    (answer) => answer.evaluationStatus === "COMPLETED",
+  );
+
+  const failedAnswers = interview.answers.filter(
+    (answer) => answer.evaluationStatus === "FAILED",
+  );
+
   const scores = interview.answers
     .map((answer) => answer.aiScore)
     .filter((score): score is number => score !== null);
@@ -72,22 +87,42 @@ export default async function InterviewResultPage({ params }: Props) {
 
   return (
     <main className="mx-auto max-w-4xl p-8">
+     <AutoEvaluateAnswers
+  sessionId={interview.id}
+  hasPendingAnswers={pendingAnswers.length > 0}
+/>
       <h1 className="mb-4 text-4xl font-bold">Interview Result</h1>
 
       <p className="mb-8 text-xl text-gray-500">
         Average score: {averageScore}/10
       </p>
 
-      <form action={generateRoadmap} className="mb-8">
-  <input type="hidden" name="sessionId" value={interview.id} />
+      {pendingAnswers.length > 0 && (
+        <div className="mb-8 rounded-xl border border-yellow-700 bg-yellow-950 p-4 text-yellow-200">
+          AI is still evaluating {pendingAnswers.length} answer(s). Refresh this
+          page in a few seconds.
+        </div>
+      )}
 
-  <button
-    type="submit"
-    className="rounded-lg bg-green-700 px-5 py-3 text-white transition hover:bg-green-800"
-  >
-    Generate roadmap
-  </button>
-</form>
+      {failedAnswers.length > 0 && (
+        <div className="mb-8 rounded-xl border border-red-700 bg-red-950 p-4 text-red-200">
+          {failedAnswers.length} answer(s) failed to evaluate. You can run the
+          evaluation job again.
+        </div>
+      )}
+
+{pendingAnswers.length === 0 && completedAnswers.length > 0 && (
+  <form action={generateRoadmap} className="mb-8">
+    <input type="hidden" name="sessionId" value={interview.id} />
+
+    <button
+      type="submit"
+      className="rounded-lg bg-green-700 px-5 py-3 text-white transition hover:bg-green-800"
+    >
+      Generate roadmap
+    </button>
+  </form>
+)}
 
       <section className="mb-10">
         <h2 className="mb-4 text-2xl font-semibold">Answers</h2>
@@ -100,88 +135,99 @@ export default async function InterviewResultPage({ params }: Props) {
             const topic = lesson.topic;
 
             return (
-<article
-  key={answer.id}
-  className="rounded-xl border p-5 shadow-sm"
->
-  <div className="mb-3 flex items-center justify-between gap-4">
-    <div>
-      <h3 className="font-semibold">{question.title}</h3>
+              <article
+                key={answer.id}
+                className="rounded-xl border p-5 shadow-sm"
+              >
+                <div className="mb-3 flex items-center justify-between gap-4">
+                  <div>
+                    <h3 className="font-semibold">{question.title}</h3>
 
-      <p className="mt-1 text-sm text-gray-500">
-        {topic.name} / {lesson.title} / {part.title}
-      </p>
-    </div>
+                    <p className="mt-1 text-sm text-gray-500">
+                      {topic.name} / {lesson.title} / {part.title}
+                    </p>
+                  </div>
 
-    <span className="shrink-0 rounded-full bg-slate-800 px-3 py-1 text-sm text-white">
-      {answer.aiScore ?? 0}/10
-    </span>
-  </div>
+                  <span className="shrink-0 rounded-full bg-slate-800 px-3 py-1 text-sm text-white">
+                    {answer.evaluationStatus === "COMPLETED"
+                      ? `${answer.aiScore ?? 0}/10`
+                      : answer.evaluationStatus === "FAILED"
+                        ? "Failed"
+                        : "Evaluating..."}
+                  </span>
+                </div>
 
-  <div className="grid gap-2 sm:grid-cols-4">
-    <p className="rounded-lg bg-slate-800 p-2 text-sm text-white">
-      Accuracy: {answer.technicalAccuracy ?? 0}/10
-    </p>
+                {answer.evaluationStatus === "COMPLETED" && (
+                  <div className="grid gap-2 sm:grid-cols-4">
+                    <p className="rounded-lg bg-slate-800 p-2 text-sm text-white">
+                      Accuracy: {answer.technicalAccuracy ?? 0}/10
+                    </p>
 
-    <p className="rounded-lg bg-slate-800 p-2 text-sm text-white">
-      Clarity: {answer.clarity ?? 0}/10
-    </p>
+                    <p className="rounded-lg bg-slate-800 p-2 text-sm text-white">
+                      Clarity: {answer.clarity ?? 0}/10
+                    </p>
 
-    <p className="rounded-lg bg-slate-800 p-2 text-sm text-white">
-      Complete: {answer.completeness ?? 0}/10
-    </p>
+                    <p className="rounded-lg bg-slate-800 p-2 text-sm text-white">
+                      Complete: {answer.completeness ?? 0}/10
+                    </p>
 
-    <p className="rounded-lg bg-slate-800 p-2 text-sm text-white">
-      Style: {answer.interviewStyle ?? 0}/10
-    </p>
-  </div>
+                    <p className="rounded-lg bg-slate-800 p-2 text-sm text-white">
+                      Style: {answer.interviewStyle ?? 0}/10
+                    </p>
+                  </div>
+                )}
+                {answer.timeSpentSeconds !== null && (
+                  <p className="mt-3 text-sm text-gray-500">
+                    Time spent: {answer.timeSpentSeconds}s
+                  </p>
+                )}
 
-  {answer.timeSpentSeconds !== null && (
-    <p className="mt-3 text-sm text-gray-500">
-      Time spent: {answer.timeSpentSeconds}s
-    </p>
-  )}
+                <details className="mt-4 rounded-xl border p-4">
+                  <summary className="cursor-pointer font-medium">
+                    View detailed feedback
+                  </summary>
 
-  <details className="mt-4 rounded-xl border p-4">
-    <summary className="cursor-pointer font-medium">
-      View detailed feedback
-    </summary>
+                  <div className="mt-4 space-y-4">
+                    {answer.aiFeedback && (
+                      <div>
+                        <h4 className="mb-1 font-semibold">Feedback</h4>
+                        <p className="text-sm text-gray-600">
+                          {answer.aiFeedback}
+                        </p>
+                      </div>
+                    )}
 
-    <div className="mt-4 space-y-4">
-      {answer.aiFeedback && (
-        <div>
-          <h4 className="mb-1 font-semibold">Feedback</h4>
-          <p className="text-sm text-gray-600">{answer.aiFeedback}</p>
-        </div>
-      )}
+                    {answer.improvedAnswer && (
+                      <div className="rounded-lg bg-green-950 p-4">
+                        <h4 className="mb-2 font-semibold text-white">
+                          Improved answer
+                        </h4>
+                        <p className="text-sm text-white">
+                          {answer.improvedAnswer}
+                        </p>
+                      </div>
+                    )}
 
-      {answer.improvedAnswer && (
-        <div className="rounded-lg bg-green-950 p-4">
-          <h4 className="mb-2 font-semibold text-white">
-            Improved answer
-          </h4>
-          <p className="text-sm text-white">{answer.improvedAnswer}</p>
-        </div>
-      )}
+                    {answer.missingConcepts && (
+                      <div className="rounded-lg bg-red-900 p-4">
+                        <h4 className="mb-2 font-semibold text-white">
+                          Missing concepts
+                        </h4>
+                        <p className="text-sm text-white">
+                          {answer.missingConcepts}
+                        </p>
+                      </div>
+                    )}
 
-      {answer.missingConcepts && (
-        <div className="rounded-lg bg-red-900 p-4">
-          <h4 className="mb-2 font-semibold text-white">
-            Missing concepts
-          </h4>
-          <p className="text-sm text-white">{answer.missingConcepts}</p>
-        </div>
-      )}
-
-      <Link
-        href={`/topics/${topic.slug}/${lesson.slug}/${part.id}`}
-        className="inline-block rounded-lg bg-black px-4 py-2 text-sm text-white"
-      >
-        Review lesson
-      </Link>
-    </div>
-  </details>
-</article>
+                    <Link
+                      href={`/topics/${topic.slug}/${lesson.slug}/${part.id}`}
+                      className="inline-block rounded-lg bg-black px-4 py-2 text-sm text-white"
+                    >
+                      Review lesson
+                    </Link>
+                  </div>
+                </details>
+              </article>
             );
           })}
         </div>

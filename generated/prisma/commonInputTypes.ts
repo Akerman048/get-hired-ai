@@ -270,6 +270,23 @@ export type EnumInterviewStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumInterviewStatusFilter<$PrismaModel>
 }
 
+export type EnumEvaluationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.EvaluationStatus | Prisma.EnumEvaluationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.EvaluationStatus[] | Prisma.ListEnumEvaluationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EvaluationStatus[] | Prisma.ListEnumEvaluationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEvaluationStatusFilter<$PrismaModel> | $Enums.EvaluationStatus
+}
+
+export type EnumEvaluationStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EvaluationStatus | Prisma.EnumEvaluationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.EvaluationStatus[] | Prisma.ListEnumEvaluationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EvaluationStatus[] | Prisma.ListEnumEvaluationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEvaluationStatusWithAggregatesFilter<$PrismaModel> | $Enums.EvaluationStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEvaluationStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEvaluationStatusFilter<$PrismaModel>
+}
+
 export type EnumRoadmapSectionFilter<$PrismaModel = never> = {
   equals?: $Enums.RoadmapSection | Prisma.EnumRoadmapSectionFieldRefInput<$PrismaModel>
   in?: $Enums.RoadmapSection[] | Prisma.ListEnumRoadmapSectionFieldRefInput<$PrismaModel>
@@ -554,6 +571,23 @@ export type NestedEnumInterviewStatusWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumInterviewStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumInterviewStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumEvaluationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.EvaluationStatus | Prisma.EnumEvaluationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.EvaluationStatus[] | Prisma.ListEnumEvaluationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EvaluationStatus[] | Prisma.ListEnumEvaluationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEvaluationStatusFilter<$PrismaModel> | $Enums.EvaluationStatus
+}
+
+export type NestedEnumEvaluationStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EvaluationStatus | Prisma.EnumEvaluationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.EvaluationStatus[] | Prisma.ListEnumEvaluationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EvaluationStatus[] | Prisma.ListEnumEvaluationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEvaluationStatusWithAggregatesFilter<$PrismaModel> | $Enums.EvaluationStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEvaluationStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEvaluationStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumRoadmapSectionFilter<$PrismaModel = never> = {
