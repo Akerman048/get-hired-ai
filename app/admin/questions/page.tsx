@@ -2,35 +2,89 @@ import { prisma } from "@/lib/prisma";
 import { Level } from "@/generated/prisma/enums";
 import Link from "next/link";
 import { createQuestion, deleteQuestion } from "./actions";
-import MarkdownContent from "@/components/ui/MarkdownContent";
 
-export default async function AdminQuestionsPage() {
-  const questions = await prisma.question.findMany({
-    include: {
-      lessonPart: {
-        include: {
-          lesson: {
-            include: {
-              topic: true,
+type Props = {
+  searchParams?: Promise<{
+    page?: string;
+  }>;
+};
+
+const PAGE_SIZE = 20;
+
+export default async function AdminQuestionsPage({ searchParams }: Props) {
+  const resolvedSearchParams = await searchParams;
+
+  const currentPage = Math.max(Number(resolvedSearchParams?.page || 1), 1);
+  const skip = (currentPage - 1) * PAGE_SIZE;
+
+  const [questions, parts, totalQuestions] = await Promise.all([
+    prisma.question.findMany({
+      select: {
+        id: true,
+        title: true,
+        level: true,
+        order: true,
+        lessonPart: {
+          select: {
+            title: true,
+            lesson: {
+              select: {
+                title: true,
+                topic: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
             },
           },
         },
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: PAGE_SIZE,
+      skip,
+    }),
 
-  const parts = await prisma.lessonPart.findMany({
-    include: {
-      lesson: {
-        include: {
-          topic: true,
+    prisma.lessonPart.findMany({
+      select: {
+        id: true,
+        title: true,
+        lesson: {
+          select: {
+            title: true,
+            topic: {
+              select: {
+                name: true,
+              },
+            },
+          },
         },
       },
-    },
-  });
+      orderBy: [
+        {
+          lesson: {
+            topic: {
+              name: "asc",
+            },
+          },
+        },
+        {
+          lesson: {
+            order: "asc",
+          },
+        },
+        {
+          order: "asc",
+        },
+      ],
+    }),
+
+    prisma.question.count(),
+  ]);
+
+  const totalPages = Math.max(Math.ceil(totalQuestions / PAGE_SIZE), 1);
 
   return (
     <main className="mx-auto max-w-5xl p-8">
@@ -123,7 +177,13 @@ export default async function AdminQuestionsPage() {
       </form>
 
       <section>
-        <h2 className="mb-4 text-2xl font-semibold">Existing Questions</h2>
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <h2 className="text-2xl font-semibold">Existing Questions</h2>
+
+          <span className="text-sm text-muted">
+            Page {currentPage} of {totalPages}
+          </span>
+        </div>
 
         <div className="space-y-4">
           {questions.map((question) => (
@@ -144,9 +204,7 @@ export default async function AdminQuestionsPage() {
                 {question.lessonPart.lesson.title} / {question.lessonPart.title}
               </p>
 
-              {/* <div className="rounded-xl border border-border bg-background p-4">
-                <MarkdownContent content={question.prompt} />
-              </div> */}
+              <p className="text-sm text-muted">Order: {question.order}</p>
 
               <form action={deleteQuestion} className="mt-4 flex gap-2">
                 <input type="hidden" name="id" value={question.id} />
@@ -167,6 +225,37 @@ export default async function AdminQuestionsPage() {
               </form>
             </article>
           ))}
+        </div>
+
+        <div className="mt-8 flex items-center justify-between gap-4">
+          <Link
+            href={`/admin/questions?page=${Math.max(currentPage - 1, 1)}`}
+            aria-disabled={currentPage === 1}
+            className={[
+              "rounded-xl px-4 py-2 text-sm font-semibold transition",
+              currentPage === 1
+                ? "pointer-events-none bg-secondary text-muted opacity-50"
+                : "bg-secondary hover:bg-card-hover",
+            ].join(" ")}
+          >
+            ← Previous
+          </Link>
+
+          <Link
+            href={`/admin/questions?page=${Math.min(
+              currentPage + 1,
+              totalPages,
+            )}`}
+            aria-disabled={currentPage === totalPages}
+            className={[
+              "rounded-xl px-4 py-2 text-sm font-semibold transition",
+              currentPage === totalPages
+                ? "pointer-events-none bg-secondary text-muted opacity-50"
+                : "bg-secondary hover:bg-card-hover",
+            ].join(" ")}
+          >
+            Next →
+          </Link>
         </div>
       </section>
     </main>

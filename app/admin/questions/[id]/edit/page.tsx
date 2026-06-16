@@ -12,41 +12,55 @@ type Props = {
 export default async function EditQuestionPage({ params }: Props) {
   const { id } = await params;
 
-  const question = await prisma.question.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      lessonPart: true,
-    },
-  });
-
-  const parts = await prisma.lessonPart.findMany({
-    include: {
-      lesson: {
-        include: {
-          topic: true,
-        },
+  const [question, parts] = await Promise.all([
+    prisma.question.findUnique({
+      where: {
+        id,
       },
-    },
-    orderBy: [
-      {
+      select: {
+        id: true,
+        lessonPartId: true,
+        title: true,
+        prompt: true,
+        order: true,
+        level: true,
+      },
+    }),
+
+    prisma.lessonPart.findMany({
+      select: {
+        id: true,
+        title: true,
         lesson: {
-          topic: {
-            name: "asc",
+          select: {
+            title: true,
+            topic: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
       },
-      {
-        lesson: {
+      orderBy: [
+        {
+          lesson: {
+            topic: {
+              name: "asc",
+            },
+          },
+        },
+        {
+          lesson: {
+            order: "asc",
+          },
+        },
+        {
           order: "asc",
         },
-      },
-      {
-        order: "asc",
-      },
-    ],
-  });
+      ],
+    }),
+  ]);
 
   if (!question) {
     notFound();

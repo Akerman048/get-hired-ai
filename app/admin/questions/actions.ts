@@ -30,7 +30,9 @@ export async function deleteQuestion(formData: FormData) {
   const id = formData.get("id") as string;
 
   await prisma.question.delete({
-    where: { id },
+    where: {
+      id,
+    },
   });
 
   revalidatePath("/topics");
@@ -46,7 +48,9 @@ export async function updateQuestion(formData: FormData) {
   const order = Number(formData.get("order") || 0);
 
   await prisma.question.update({
-    where: { id },
+    where: {
+      id,
+    },
     data: {
       lessonPartId,
       title,
