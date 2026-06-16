@@ -8,9 +8,9 @@ function createSlug(value: string) {
   return value
     .toLowerCase()
     .trim()
-    .replaceAll(" ", "-")
-    .replaceAll(".", "")
-    .replaceAll("#", "sharp");
+    .replace(/[#]/g, "sharp")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 export async function createTopic(formData: FormData) {
@@ -32,7 +32,9 @@ export async function deleteTopic(formData: FormData) {
   const id = formData.get("id") as string;
 
   await prisma.topic.delete({
-    where: { id },
+    where: {
+      id,
+    },
   });
 
   revalidatePath("/topics");
@@ -45,7 +47,9 @@ export async function updateTopic(formData: FormData) {
   const slug = createSlug(name);
 
   await prisma.topic.update({
-    where: { id },
+    where: {
+      id,
+    },
     data: {
       name,
       slug,
@@ -54,4 +58,6 @@ export async function updateTopic(formData: FormData) {
 
   revalidatePath("/topics");
   revalidatePath("/admin/topics");
+
+  redirect("/admin/topics");
 }

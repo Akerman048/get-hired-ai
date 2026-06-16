@@ -4,15 +4,18 @@ import { createTopic, deleteTopic } from "./actions";
 
 export default async function AdminTopicsPage() {
   const topics = await prisma.topic.findMany({
-    orderBy: {
-      name: "asc",
-    },
-    include: {
+    select: {
+      id: true,
+      name: true,
+      slug: true,
       _count: {
         select: {
           lessons: true,
         },
       },
+    },
+    orderBy: {
+      name: "asc",
     },
   });
 

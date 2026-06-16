@@ -15,6 +15,10 @@ export default async function EditTopicPage({ params }: Props) {
     where: {
       id,
     },
+    select: {
+      id: true,
+      name: true,
+    },
   });
 
   if (!topic) {
@@ -23,9 +27,7 @@ export default async function EditTopicPage({ params }: Props) {
 
   return (
     <main className="mx-auto max-w-3xl p-8">
-      <h1 className="mb-8 text-4xl font-bold">
-        Edit Topic
-      </h1>
+      <h1 className="mb-8 text-4xl font-bold">Edit Topic</h1>
 
       <form
         action={updateTopic}
