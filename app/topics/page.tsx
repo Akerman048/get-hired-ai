@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { topicIcons, topicColors } from "@/lib/topic-icons";
+import { SiJavascript } from "react-icons/si";
 
 const Topics = async () => {
   const topics = await prisma.topic.findMany({
@@ -88,46 +90,56 @@ const Topics = async () => {
             </div>
 
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {topics.map((topic, index) => (
-                <Link
-                  key={topic.id}
-                  href={`/topics/${topic.slug}`}
-                  className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-card p-6 shadow-2xl backdrop-blur-xl transition hover:-translate-y-1 hover:bg-card-hover"
-                >
-                  <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-violet-500/10 blur-2xl transition group-hover:bg-violet-500/20" />
+              {topics.map((topic) => {
+                const Icon =
+                  topicIcons[topic.slug as keyof typeof topicIcons] ??
+                  SiJavascript;
 
-                  <div className="relative">
-                    <div className="mb-6 flex items-start justify-between gap-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-500/15 text-2xl text-violet-300">
-                        {index + 1}
+                const color =
+                  topicColors[topic.slug as keyof typeof topicColors] ??
+                  "#A855F7";
+
+                return (
+                  <Link
+                    key={topic.id}
+                    href={`/topics/${topic.slug}`}
+                    className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-card p-6 shadow-2xl backdrop-blur-xl transition hover:-translate-y-1 hover:bg-card-hover"
+                  >
+                    <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-violet-500/10 blur-2xl transition group-hover:bg-violet-500/20" />
+
+                    <div className="relative">
+                      <div className="mb-6 flex items-start justify-between gap-4">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 text-3xl">
+                          <Icon color={color} />
+                        </div>
+
+                        <span className="rounded-full bg-white/5 px-3 py-1 text-xs font-semibold text-slate-400">
+                          Topic
+                        </span>
                       </div>
 
-                      <span className="rounded-full bg-white/5 px-3 py-1 text-xs font-semibold text-slate-400">
-                        Topic
-                      </span>
+                      <h3 className="text-2xl font-black text-white transition group-hover:text-violet-200">
+                        {topic.name}
+                      </h3>
+
+                      <p className="mt-3 min-h-[48px] text-sm leading-6 text-slate-400">
+                        Practice interview questions and review learning
+                        materials.
+                      </p>
+
+                      <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-5">
+                        <span className="text-sm font-bold text-slate-200">
+                          Start learning
+                        </span>
+
+                        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-600/30 text-xl text-violet-200 transition group-hover:bg-violet-500 group-hover:text-white">
+                          ›
+                        </span>
+                      </div>
                     </div>
-
-                    <h3 className="text-2xl font-black text-white transition group-hover:text-violet-200">
-                      {topic.name}
-                    </h3>
-
-                    <p className="mt-3 min-h-[48px] text-sm leading-6 text-slate-400">
-                      Practice interview questions and review learning
-                      materials.
-                    </p>
-
-                    <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-5">
-                      <span className="text-sm font-bold text-slate-200">
-                        Start learning
-                      </span>
-
-                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-600/30 text-xl text-violet-200 transition group-hover:bg-violet-500 group-hover:text-white">
-                        ›
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           </section>
         )}
