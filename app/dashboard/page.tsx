@@ -14,89 +14,131 @@ export default async function DashboardPage() {
     where: {
       email: session.user.email,
     },
+    select: {
+      id: true,
+    },
   });
 
-  const topics = await prisma.topic.findMany({
-    include: {
-      lessons: {
-        include: {
-          parts: {
-            include: {
-              progress: {
-                where: {
-                  userId: user.id,
-                  completed: true,
+  const [
+    totalParts,
+    completedParts,
+    startedTopics,
+    weakAnswers,
+    latestRoadmap,
+  ] = await Promise.all([
+    prisma.lessonPart.count(),
+
+    prisma.userProgress.count({
+      where: {
+        userId: user.id,
+        completed: true,
+      },
+    }),
+
+    prisma.topic.findMany({
+      where: {
+        lessons: {
+          some: {
+            parts: {
+              some: {
+                progress: {
+                  some: {
+                    userId: user.id,
+                    completed: true,
+                  },
                 },
               },
             },
           },
         },
       },
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
-
-  const weakAnswers = await prisma.userAnswer.findMany({
-    where: {
-      userId: user.id,
-      aiScore: {
-        lt: 8,
-      },
-    },
-    include: {
-      question: {
-        include: {
-          lessonPart: {
-            include: {
-              lesson: {
-                include: {
-                  topic: true,
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        lessons: {
+          select: {
+            parts: {
+              select: {
+                id: true,
+                progress: {
+                  where: {
+                    userId: user.id,
+                    completed: true,
+                  },
+                  select: {
+                    id: true,
+                  },
                 },
               },
             },
           },
         },
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 5,
-  });
+      orderBy: {
+        name: "asc",
+      },
+    }),
 
-  const latestRoadmap = await prisma.roadmap.findFirst({
-    where: {
-      userId: user.id,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+    prisma.userAnswer.findMany({
+      where: {
+        userId: user.id,
+        aiScore: {
+          lt: 8,
+        },
+      },
+      select: {
+        id: true,
+        aiScore: true,
+        aiFeedback: true,
+        question: {
+          select: {
+            title: true,
+            lessonPart: {
+              select: {
+                id: true,
+                title: true,
+                lesson: {
+                  select: {
+                    title: true,
+                    slug: true,
+                    topic: {
+                      select: {
+                        name: true,
+                        slug: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 5,
+    }),
 
-  const getTopicParts = (topic: (typeof topics)[number]) => {
-    return topic.lessons.flatMap((lesson) => lesson.parts);
-  };
-
-  const totalParts = topics.reduce((sum, topic) => {
-    return sum + getTopicParts(topic).length;
-  }, 0);
-
-  const completedParts = topics.reduce((sum, topic) => {
-    const parts = getTopicParts(topic);
-
-    return sum + parts.filter((part) => part.progress.length > 0).length;
-  }, 0);
+    prisma.roadmap.findFirst({
+      where: {
+        userId: user.id,
+      },
+      select: {
+        id: true,
+        title: true,
+        summary: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+  ]);
 
   const overallProgress =
     totalParts > 0 ? Math.round((completedParts / totalParts) * 100) : 0;
-
-  const startedTopics = topics.filter((topic) => {
-    const parts = getTopicParts(topic);
-
-    return parts.some((part) => part.progress.length > 0);
-  });
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-background px-4 py-8 text-foreground">
@@ -235,7 +277,9 @@ export default async function DashboardPage() {
             ) : (
               <div className="space-y-4">
                 {startedTopics.map((topic) => {
-                  const parts = getTopicParts(topic);
+                  const parts = topic.lessons.flatMap(
+                    (lesson) => lesson.parts,
+                  );
 
                   const completed = parts.filter(
                     (part) => part.progress.length > 0,
