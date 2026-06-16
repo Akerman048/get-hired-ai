@@ -23,25 +23,42 @@ export default async function TopicPage({ params }: Props) {
     where: {
       email: session.user.email,
     },
+    select: {
+      id: true,
+    },
   });
 
   const topic = await prisma.topic.findUnique({
-    where: { slug },
-    include: {
+    where: {
+      slug,
+    },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
       lessons: {
         orderBy: {
           order: "asc",
         },
-        include: {
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          description: true,
+          order: true,
           parts: {
             orderBy: {
               order: "asc",
             },
-            include: {
+            select: {
+              id: true,
               progress: {
                 where: {
                   userId: user.id,
                   completed: true,
+                },
+                select: {
+                  id: true,
                 },
               },
             },
