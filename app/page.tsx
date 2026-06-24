@@ -135,7 +135,7 @@ export default async function HomePage() {
 
           <div className="relative">
             <h2 className="text-5xl font-black text-white">
-              Ready to get hired? 💼
+              Ready for your next offer?
             </h2>
 
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-400">

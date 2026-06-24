@@ -26,7 +26,7 @@ export async function Header() {
 
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-white">
-              Get Hired
+              Next Offer
             </h1>
             <p className="text-xs text-slate-400">AI Interview Trainer</p>
           </div>

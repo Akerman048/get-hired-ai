@@ -32,8 +32,8 @@ const geistMono = Geist_Mono({
 // });
 
 export const metadata: Metadata = {
-  title: "Get hired",
-  description: "Learn frontend and get a job",
+  title: "Next Offer",
+  description: "Practice interviews, improve your skills, and prepare for your next offer",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",

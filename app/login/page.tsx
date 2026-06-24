@@ -14,7 +14,7 @@ export default function LoginPage() {
           </h1>
 
           <p className="mt-4 text-muted">
-            Continue to Get Hired and keep preparing for your next developer
+            Continue to Next Offer and keep preparing for your next developer
             interview.
           </p>
         </div>
@@ -42,7 +42,7 @@ export default function LoginPage() {
         </div>
 
         <div className="mt-10 border-t border-border pt-6 text-center text-sm text-muted">
-          AI Interview Trainer · Learn · Practice · Get Hired 💼
+          Next Offer · Learn · Practice · Interview
         </div>
       </div>
     </main>
