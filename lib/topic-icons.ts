@@ -11,6 +11,7 @@ import {
   SiHtml5,
   SiCss,
   SiGit,
+  SiGooglechrome,
 } from "react-icons/si";
 
 export const topicIcons = {
@@ -24,6 +25,7 @@ export const topicIcons = {
   html: SiHtml5,
   css: SiCss,
   git: SiGit,
+  "browser-api": SiGooglechrome,
 };
 
 export const topicColors = {
@@ -37,4 +39,6 @@ export const topicColors = {
   html: "#E34F26",
   css: "#1572B6",
   git: "#F05032",
+  "browser-api": "#4285F4",
 };
+

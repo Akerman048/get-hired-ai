@@ -13,6 +13,7 @@ async function main() {
     { name: "Node.js", slug: "nodejs" },
     { name: "Express", slug: "express" },
     { name: "PostgreSQL", slug: "postgresql" },
+    { name: "Browser APIs", slug: "browser-apis" },
   ];
 
   for (const topic of topics) {
