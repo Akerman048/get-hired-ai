@@ -101,6 +101,45 @@ export default async function LessonPartPage({ params }: Props) {
 
   const currentIndex = parts.findIndex((item) => item.id === part.id);
   const nextPart = parts[currentIndex + 1];
+  const lessonNavigation = nextPart
+    ? null
+    : await prisma.lesson.findMany({
+        where: {
+          topicId: topic.id,
+          parts: {
+            some: {},
+          },
+        },
+        select: {
+          id: true,
+          slug: true,
+          parts: {
+            orderBy: {
+              order: "asc",
+            },
+            take: 1,
+            select: {
+              id: true,
+            },
+          },
+        },
+        orderBy: [
+          {
+            order: "asc",
+          },
+          {
+            title: "asc",
+          },
+        ],
+      });
+
+  const currentLessonIndex =
+    lessonNavigation?.findIndex((item) => item.id === lesson.id) ?? -1;
+  const nextLesson =
+    currentLessonIndex >= 0
+      ? lessonNavigation?.[currentLessonIndex + 1]
+      : undefined;
+  const firstNextLessonPart = nextLesson?.parts[0];
 
   const totalParts = parts.length;
   const completedParts = parts.filter((item) => item.progress.length > 0).length;
@@ -112,6 +151,8 @@ export default async function LessonPartPage({ params }: Props) {
 
   const nextPath = nextPart
     ? `/topics/${slug}/${lessonSlug}/${nextPart.id}`
+    : nextLesson && firstNextLessonPart
+      ? `/topics/${slug}/${nextLesson.slug}/${firstNextLessonPart.id}`
     : `/topics/${slug}`;
 
   const questionIds = questions.map((question) => question.id);
@@ -322,10 +363,14 @@ export default async function LessonPartPage({ params }: Props) {
               type="submit"
               className="group flex w-full items-center justify-center gap-3 rounded-[28px] bg-violet-500 px-6 py-5 text-lg font-black text-white shadow-2xl shadow-violet-500/25 transition hover:-translate-y-1 hover:bg-violet-400"
             >
-              {nextPart ? "Continue to next part" : "Finish lesson"}
+              {nextPart
+                ? "Continue to next part"
+                : firstNextLessonPart
+                  ? "Finish lesson and start next lesson"
+                  : "Finish lesson"}
 
               <span className="text-2xl transition group-hover:translate-x-1">
-                {nextPart ? "›" : "✓"}
+                {nextPart || firstNextLessonPart ? "›" : "✓"}
               </span>
             </button>
           </form>
