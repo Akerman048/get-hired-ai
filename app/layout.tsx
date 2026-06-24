@@ -1,9 +1,19 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Geist, Geist_Mono } from "next/font/google";
+import {
+  Cantarell,
+  Geist,
+  Geist_Mono,
+} from "next/font/google";
 
 import { Header } from "@/components/Header";
 
 import "./globals.css";
+
+const cantarell = Cantarell({
+  variable: "--font-cantarell",
+  weight: ["400", "700"],
+  subsets: ["latin"],
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,11 +25,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const bebasNeue = Bebas_Neue({
-  variable: "--font-bebas",
-  weight: "400",
-  subsets: ["latin"],
-});
+// const bebasNeue = Bebas_Neue({
+//   variable: "--font-bebas",
+//   weight: "400",
+//   subsets: ["latin"],
+// });
 
 export const metadata: Metadata = {
   title: "Get hired",
@@ -33,8 +43,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body  className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable}`}>
-        <Header />
+<body
+  className={`${geistSans.variable} ${geistMono.variable} ${cantarell.variable}`}
+>        <Header />
         {children}
       </body>
     </html>

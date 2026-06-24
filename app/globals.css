@@ -69,8 +69,7 @@
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-bebas);
-}
+ --font-heading: var(--font-cantarell);}
 
 * {
   box-sizing: border-box;
@@ -87,7 +86,7 @@ body {
     radial-gradient(circle at bottom left, rgba(30, 64, 175, 0.26), transparent 34%),
     var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: var(--font-cantarell);
 }
 
 h1,
@@ -96,7 +95,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-heading);
+  font-family: var(--font-cantarell);
 }
 
 .nav-link {
